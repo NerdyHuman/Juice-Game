@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=4 uid="uid://n5kdwoqym7eg"]
+
+[ext_resource type="Script" path="res://layer2.gd" id="1_jyesv"]
+[ext_resource type="Texture2D" uid="uid://ci6dgybu1ltdf" path="res://Sprite-0005.png" id="3_kk1v3"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vb3lj"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tk488"]
+texture = ExtResource("3_kk1v3")
+2:0/size_in_atlas = Vector2i(2, 1)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-9, 0, 12, 0, 12, 5, -9, 5)
+
+[sub_resource type="TileSet" id="TileSet_hqbxo"]
+physics_layer_0/collision_layer = 1
+physics_layer_0/physics_material = SubResource("PhysicsMaterial_vb3lj")
+sources/0 = SubResource("TileSetAtlasSource_tk488")
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0onf6"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_86as6"]
+texture = ExtResource("3_kk1v3")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 8, 8, -8, -8, -8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
+2:0/size_in_atlas = Vector2i(2, 1)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8.9375, 5.125, -8.9375, 0.125, 12.0625, 0, 12.125, 5.25)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, -8, -8, 8, -8, 8, 8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
+0:1/size_in_atlas = Vector2i(1, 2)
+0:1/next_alternative_id = 2
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -8)
+0:1/1 = 1
+0:1/1/texture_origin = Vector2i(0, -8)
+0:1/1/z_index = -1
+
+[sub_resource type="TileSet" id="TileSet_06h52"]
+physics_layer_0/collision_layer = 1
+physics_layer_0/physics_material = SubResource("PhysicsMaterial_0onf6")
+sources/0 = SubResource("TileSetAtlasSource_86as6")
+
+[node name="Layer2" type="Node2D"]
+script = ExtResource("1_jyesv")
+
+[node name="JumpPads" type="TileMapLayer" parent="."]
+scale = Vector2(4.5, 4.5)
+tile_map_data = PackedByteArray("AAASAAQAAAACAAAAAAAXAAMAAAACAAAAAAA=")
+tile_set = SubResource("TileSet_hqbxo")
+
+[node name="Terrain" type="TileMapLayer" parent="."]
+scale = Vector2(4.5, 4.5)
+tile_map_data = PackedByteArray("AAAAAAcAAAAAAAAAAAABAAcAAAAAAAAAAAACAAcAAAAAAAAAAAADAAcAAAAAAAAAAAAEAAcAAAAAAAAAAAAFAAcAAAAAAAAAAAAGAAcAAAAAAAAAAAAHAAcAAAAAAAAAAAAIAAcAAAAAAAAAAAAJAAcAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAcAAAAAAAAAAAAMAAcAAAAAAAAAAAANAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAABAAgAAAAAAAAAAAACAAgAAAAAAAAAAAADAAgAAAAAAAAAAAAEAAgAAAAAAAAAAAAFAAgAAAAAAAAAAAAGAAgAAAAAAAAAAAAHAAgAAAAAAAAAAAAIAAgAAAAAAAAAAAAJAAgAAAAAAAAAAAAKAAgAAAAAAAAAAAALAAgAAAAAAAAAAAAMAAgAAAAAAAAAAAANAAgAAAAAAAAAAAAOAAgAAAAAAAAAAAAPAAgAAAAAAAAAAAAPAAcAAAAAAAAAAAAOAAcAAAAAAAAAAAAJAAYAAAABAAAAAAAIAAYAAAABAAAAAAAHAAYAAAABAAAAAAAKAAYAAAAAAAAAAAALAAYAAAAAAAAAAAAMAAYAAAAAAAAAAAANAAYAAAAAAAAAAAAOAAYAAAAAAAAAAAAPAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAFAAYAAAAAAAAAAAAEAAYAAAAAAAAAAAADAAYAAAAAAAAAAAACAAYAAAAAAAAAAAAAAAYAAAABAAAAAAABAAYAAAABAAAAAAACAAUAAAABAAAAAAADAAUAAAABAAAAAAAEAAUAAAABAAAAAAAFAAUAAAABAAAAAAAGAAUAAAABAAAAAAAKAAUAAAABAAAAAAALAAUAAAABAAAAAAAMAAUAAAABAAAAAAANAAUAAAABAAAAAAAOAAUAAAABAAAAAAAPAAUAAAABAAAAAAAAAAkAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAFAAkAAAAAAAAAAAAGAAkAAAAAAAAAAAAHAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAJAAkAAAAAAAAAAAAKAAkAAAAAAAAAAAALAAkAAAAAAAAAAAAMAAkAAAAAAAAAAAANAAkAAAAAAAAAAAAOAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAAPAAoAAAAAAAAAAAAOAAoAAAAAAAAAAAANAAoAAAAAAAAAAAAMAAoAAAAAAAAAAAALAAoAAAAAAAAAAAAKAAoAAAAAAAAAAAAJAAoAAAAAAAAAAAAIAAoAAAAAAAAAAAAHAAoAAAAAAAAAAAAGAAoAAAAAAAAAAAAFAAoAAAAAAAAAAAAEAAoAAAAAAAAAAAADAAoAAAAAAAAAAAACAAoAAAAAAAAAAAABAAoAAAAAAAAAAAAAAAoAAAAAAAAAAAAHAAUAAAABAAEAAAAHAAQAAAABAAEAAAAHAAMAAAABAAEAAAAHAAIAAAABAAEAAAAHAAEAAAABAAEAAAAHAAAAAAABAAEAAAAKAAMAAAAAAAEAAAALAAMAAAAAAAEAAAAMAAMAAAAAAAEAAQANAAMAAAAAAAEAAQAOAAMAAAAAAAEAAAAPAAMAAAAAAAEAAQA=")
+tile_set = SubResource("TileSet_06h52")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 530.0
+offset_top = 187.0
+offset_right = 570.0
+offset_bottom = 210.0
+text = "Welcome to Layer two!"
