@@ -1,11 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwdqp310dgnpt"]
+[gd_scene load_steps=2 format=3 uid="uid://bwdqp310dgnpt"]
 
-[ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://player.tscn" id="1_2n8ed"]
 [ext_resource type="Script" path="res://root.gd" id="1_q774y"]
 
 [node name="Root" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_q774y")
-
-[node name="CharacterBody2D" parent="." instance=ExtResource("1_2n8ed")]
-scale = Vector2(4.5, 4.5)

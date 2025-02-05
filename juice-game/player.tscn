@@ -15,5 +15,3 @@ shape = SubResource("CapsuleShape2D_rmvda")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_n1q4u")
-
-[node name="Camera2D" type="Camera2D" parent="."]
