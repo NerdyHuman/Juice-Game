@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bwdqp310dgnpt"]
-
-[ext_resource type="Script" path="res://src/root.gd" id="1_q774y"]
-
-[node name="Root" type="Node2D"]
-texture_filter = 1
-script = ExtResource("1_q774y")
