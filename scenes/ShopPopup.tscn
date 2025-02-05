@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dwmc4d2smlglb"]
 
-[ext_resource type="Script" path="res://shop_popup.gd" id="1_usgdm"]
+[ext_resource type="Script" path="res://src/shop_popup.gd" id="1_usgdm"]
 
 [node name="ShopPopup" type="Control"]
 z_index = 1

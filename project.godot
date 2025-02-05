@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Juice-Game"
-run/main_scene="res://NewRoot.tscn"
+run/main_scene="res://scenes/NewRoot.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://res/icon.svg"
 
 [autoload]
 
-Icon="*res://layer1.gd"
+Icon="*res://src/layer1.gd"
 
 [display]
 

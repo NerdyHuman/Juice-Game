@@ -7,7 +7,7 @@ var activePlayer: int = 0
 var balance: int = 0
 
 var prices: Dictionary = {"Godot": 90, "Player": 20}
-var iconPaths: Dictionary = {"Godot": "res://icon.svg", "Player": "res://player.png"}
+var iconPaths: Dictionary = {"Godot": "res://res/icon.svg", "Player": "res://res/player.png"}
 
 # Takes an X value and returns how tall the passage should be
 func generateTerrain(x: int):
@@ -41,7 +41,7 @@ func buyItem(name: String) -> bool:
 func showShopUI():
 	get_child(activePlayer).isActive = false
 	
-	var shopUI = load("res://ShopPopup.tscn") as PackedScene
+	var shopUI = load("res://scenes/ShopPopup.tscn") as PackedScene
 	
 	var scene = shopUI.instantiate()
 	

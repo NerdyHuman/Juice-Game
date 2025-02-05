@@ -13,9 +13,9 @@ func loadLayer(layer: int) -> void:
 	var resource = null
 	
 	if layer == 0:
-		resource = load("res://layer1.tscn")
+		resource = load("res://scenes/layer1.tscn")
 	else:
-		resource = load("res://layer2.tscn")
+		resource = load("res://scenes/layer2.tscn")
 	
 	var scene = resource as PackedScene
 	
