@@ -6,84 +6,19 @@ const JUMP_QUEUE_GRACE_PERIOD = 0.1
 
 var isJumpQueued = false
 var timeSinceJumpQueued = 0
-var canBreakOrBuild = false
-var canBuy = false
-var isActive = false
 
-func _input(_event: InputEvent) -> void:
-	if !isActive:
-		return
-	
-	if Input.is_action_just_pressed("mine"):
-		if !canBreakOrBuild:
-			return
-		
-		var terrain = get_parent().get_child(2) as TileMapLayer
-		var mouseCoords = get_local_mouse_position()
-		var mapCoords = terrain.local_to_map(terrain.to_local(to_global(mouseCoords)))
-		var tileData = terrain.get_cell_tile_data(mapCoords)
-		
-		if !tileData:
-			return
-		
-		if !mouseCoords.length() < 30:
-			return
-		
-		terrain.set_cell(mapCoords)
-		
-		if randi() % 4 == 0:
-			get_parent().giveBalance(10)
-		
-	if Input.is_action_just_pressed("build"):
-		if !canBreakOrBuild:
-			return
-		
-		var terrain = get_parent().get_child(2) as TileMapLayer
-		var mouseCoords = get_local_mouse_position()
-		var mapCoords = terrain.local_to_map(terrain.to_local(to_global(mouseCoords)))
-		
-		var tileData = terrain.get_cell_tile_data(mapCoords)
-		
-		if tileData:
-			return
-		
-		# too far away or player will get stuck
-		if !mouseCoords.length() < 30 || mouseCoords.length() < 15:
-			return
-		
-		terrain.set_cell(mapCoords, 0, Vector2i(0, 0))
-	
-	if Input.is_action_just_pressed("buy"):
-		if !canBuy:
-			return
-		
-		var shops = get_parent().get_child(3) as TileMapLayer
-		var playerCoords = get_global_transform().get_origin()
-		var playerMapCoords = shops.local_to_map(shops.to_local(playerCoords))
-		
-		var _cells = shops.get_used_cells()
-		
-		var surroundingTiles = shops.get_surrounding_cells(playerMapCoords)
-		
-		for tile in surroundingTiles:
-			var tileData = shops.get_cell_tile_data(tile)
-			if tileData:
-				print("Shop nearby!")
-				
-				get_parent().showShopUI()
-				
-				break
+var canDash = true
 
 func _physics_process(delta: float) -> void:
-	if !isActive:
-		return
-	
-	if get_tree().root.get_child(1).isTransitioning:
+	if get_tree().root.get_node("Root").isTransitioning:
 		return
 	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+	else:
+		# Reset dash
+		canDash = true
 
 	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
@@ -107,10 +42,41 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
+	# Handle Dash
+	if Input.is_action_just_pressed("dash") and canDash:
+		var verticalDirection := Input.get_axis("look-up", "look-down")
+		
+		canDash = false
+		
+		velocity.x *= 2
+		
+		# Origin of the raycast, offset by 5 to prevent intentional glitching
+		var origin = (position + Vector2(5 * sign(direction), 5 * sign(verticalDirection)))
+		var positionOffset = Vector2(200 * sign(direction), 200 * sign(verticalDirection))
+		
+		var space_state = get_world_2d().direct_space_state
+		var query = PhysicsRayQueryParameters2D.create(origin, position + positionOffset)
+		var result = space_state.intersect_ray(query)
+		
+		var tween = get_tree().create_tween()
+		tween.set_trans(Tween.TRANS_QUART)
+		tween.set_ease(Tween.EASE_IN_OUT)
+		
+		#if get_child(1).get("flip_h"):
+		if result:
+			tween.tween_property(self, "position", result.position, 0.1)
+		else:
+			tween.tween_property(self, "position", position + positionOffset, 0.1)
+		#else:
+			#if resultNegative:
+				#tween.tween_property(self, "position", resultNegative.position, 0.1)
+			#else:
+				#tween.tween_property(self, "position", position - positionOffset, 0.1)
+	
 	if direction > 0:
-		get_child(1).set("flip_h", true)
+		get_node("Sprite2D").set("flip_h", true)
 	elif direction < 0:
-		get_child(1).set("flip_h", false)
+		get_node("Sprite2D").set("flip_h", false)
 		
 	move_and_slide()
 	
@@ -125,6 +91,6 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	
-	#if position.y >= 600:
-		#print("Dead!")
-		#get_parent().respawnPlayer()
+	if position.y >= 600:
+		print("Dead!")
+		get_parent().respawnPlayer()

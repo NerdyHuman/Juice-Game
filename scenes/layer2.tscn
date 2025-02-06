@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/layer2.gd" id="1_jyesv"]
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="2_a26os"]
-[ext_resource type="Texture2D" uid="uid://ci6dgybu1ltdf" path="res://res/Sprite-0005.png" id="3_kk1v3"]
+[ext_resource type="Texture2D" uid="uid://r8q3lbkwv80y" path="res://res/Sprite-0005.png" id="3_kk1v3"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vb3lj"]
 
@@ -42,7 +42,7 @@ sources/0 = SubResource("TileSetAtlasSource_86as6")
 texture_filter = 1
 script = ExtResource("1_jyesv")
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("2_a26os")]
+[node name="Player" parent="." instance=ExtResource("2_a26os")]
 scale = Vector2(4.5, 4.5)
 
 [node name="SpawnPoint" type="Node2D" parent="."]
