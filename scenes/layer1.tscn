@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://src/layer1.gd" id="1_pewjb"]
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="2_ba21d"]
-[ext_resource type="Texture2D" uid="uid://r8q3lbkwv80y" path="res://res/Sprite-0005.png" id="3_6bj35"]
-[ext_resource type="Texture2D" uid="uid://cxnsq4oxhd71a" path="res://res/Sprite-0001.png" id="4_ekxbt"]
+[ext_resource type="Texture2D" uid="uid://r8q3lbkwv80y" path="res://assets/Sprite-0005.png" id="3_6bj35"]
+[ext_resource type="Texture2D" uid="uid://cxnsq4oxhd71a" path="res://assets/Sprite-0001.png" id="4_ekxbt"]
 [ext_resource type="Script" path="res://scenes/buttons_layer1.gd" id="5_82iql"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m56qd"]

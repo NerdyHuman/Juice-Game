@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=4 uid="uid://dle7yp3ngu5m7"]
 
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="1_em357"]
-[ext_resource type="Texture2D" uid="uid://r8q3lbkwv80y" path="res://res/Sprite-0005.png" id="1_nw7gh"]
+[ext_resource type="Texture2D" uid="uid://ci6dgybu1ltdf" path="res://assets/Sprite-0005.png" id="1_nw7gh"]
 
 [sub_resource type="GDScript" id="GDScript_r7bux"]
 script/source = "extends Node2D
@@ -13,7 +13,7 @@ var activePlayer: int = 0
 var balance: int = 0
 
 var prices: Dictionary = {\"Godot\": 90, \"Player\": 20}
-var iconPaths: Dictionary = {\"Godot\": \"res://res/icon.svg\", \"Player\": \"res://res/player.png\"}
+var iconPaths: Dictionary = {\"Godot\": \"res://assets/icon.svg\", \"Player\": \"res://assets/player.png\"}
 
 # Takes an X value and returns how tall the passage should be
 func generateTerrain(x: int):
