@@ -46,10 +46,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("dash") and canDash:
 		var verticalDirection := Input.get_axis("look-up", "look-down")
 		
-		# up
-		if verticalDirection < 0:
-			velocity.y = -400
-		
 		canDash = false
 		
 		velocity.x *= 2
@@ -85,27 +81,15 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	for i in get_slide_collision_count():
-		var collision = get_slide_collision(i)
-		var collider = collision.get_collider()
+		var collider = get_slide_collision(i).get_collider()
 		
 		if collider is TileMapLayer:
 			var tileMapLayer = collider as TileMapLayer
 			
 			if tileMapLayer.name == "JumpPads":
-				canDash = true
 				velocity.y = JUMP_VELOCITY
-			if tileMapLayer.name == "Buttons":
-				var tilePosition = collider.local_to_map(collider.to_local(collision.get_position()))
-				
-				collider.executeButton(tilePosition)
 
 	move_and_slide()
-	
-	if position.x < 500:
-		position.x = 500
-	if get_parent().to_global(position).y < 0:
-		velocity.y = 0
-		position.y = get_parent().to_local(Vector2(position.x, 0)).y
 	
 	if position.y >= 600:
 		print("Dead!")
