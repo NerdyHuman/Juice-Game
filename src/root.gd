@@ -4,12 +4,16 @@ const NIL_VECTOR2 = Vector2(999, 999)
 
 var activeLayer = 0
 
+var loadCount = 0
+
 var layerOnePosition: Vector2 = NIL_VECTOR2
 var layerTwoPosition: Vector2 = NIL_VECTOR2
 
 var isTransitioning = false
 
 func loadLayer(layer: int) -> void:
+	loadCount += 1
+	
 	var resource = null
 	
 	if layer == 0:
@@ -32,6 +36,17 @@ func loadLayer(layer: int) -> void:
 		else:
 			sceneNode.get_node("Player").set("position", layerTwoPosition)
 	
+	print(loadCount)
+	if loadCount == 3:
+		sceneNode.get_node("Label").set("text", "Press V to dash!")
+	elif loadCount == 4:
+		sceneNode.get_node("Label").set("text", "Thanks for reading!")
+	# imagine
+	elif loadCount == 50:
+		sceneNode.get_node("Label").set("text", "You can stop now..")
+	elif loadCount > 4:
+		sceneNode.get_node("Label").queue_free()
+		
 	add_child(sceneNode)
 
 func switchLayers():
