@@ -8,10 +8,26 @@ var isJumpQueued = false
 var timeSinceJumpQueued = 0
 
 var coyote = false
-var coyoteLastFloor
+var coyoteLastFloor = false
 var isJumping = false
 
-var canDash = true
+var isOnPressurePlate = false
+var pressurePlateCoords
+var pressurePlateLayer
+
+var canDash = false
+
+func killPlayer() -> void:
+	print("Died!")
+	get_tree().root.get_node("Root").respawnPlayer()
+
+func killzone_callback(body: Node2D) -> void:
+	if body == self:
+		killPlayer()
+
+func enableDash() -> void:
+	canDash = true
+	get_tree().root.get_node("Root").reset_switch_regen_count()
 
 func _physics_process(delta: float) -> void:
 	if get_tree().root.get_node("Root").isTransitioning:
@@ -21,8 +37,7 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	else:
-		# Reset dash
-		canDash = true
+		enableDash()
 		isJumping = false
 	
 	if not is_on_floor() and coyoteLastFloor and not isJumping:
@@ -39,12 +54,10 @@ func _physics_process(delta: float) -> void:
 	if isJumpQueued and (is_on_floor() or coyote):
 		isJumpQueued = false
 		isJumping = true
-		print("timeSinceJumpQueued = ", timeSinceJumpQueued)
 		velocity.y = JUMP_VELOCITY
 	elif isJumpQueued:
 		timeSinceJumpQueued += delta
 		if timeSinceJumpQueued > JUMP_QUEUE_GRACE_PERIOD:
-			print("Dequeued jump!")
 			isJumpQueued = false
 
 	# Get the input direction and handle the movement/deceleration.
@@ -87,22 +100,55 @@ func _physics_process(delta: float) -> void:
 				#tween.tween_property(self, "position", position - positionOffset, 0.1)
 	
 	if direction > 0:
-		get_node("Sprite2D").set("flip_h", true)
-	elif direction < 0:
 		get_node("Sprite2D").set("flip_h", false)
+	elif direction < 0:
+		get_node("Sprite2D").set("flip_h", true)
 		
 	move_and_slide()
 	
+	var isOnPressurePlateNow = false
+	var currentPressurePlate
+	var currentPressurePlateLayer
+	
 	for i in get_slide_collision_count():
-		var collider = get_slide_collision(i).get_collider()
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
 		
 		if collider is TileMapLayer:
 			var tileMapLayer = collider as TileMapLayer
 			
 			if tileMapLayer.name == "JumpPads":
-				velocity.y = JUMP_VELOCITY
-				canDash = true
+				velocity.y = JUMP_VELOCITY * 1.5
+				enableDash()
 				isJumping = true
+			if tileMapLayer.name == "Checkpoints":
+				var collisionPoint = collision.get_position()
+				var collisionPointInMap = collider.local_to_map(collider.to_local(collisionPoint))
+				
+				if collider.get_cell_atlas_coords(collisionPointInMap) == Vector2i(1, 0):
+					collider.set_cell(collisionPointInMap, 0, Vector2i(0, 0))
+					
+					get_tree().root.get_node("Root").set_spawnpoint(collisionPoint)
+			if tileMapLayer.name == "PressurePlates" and collision.get_angle() == 0:
+				isOnPressurePlateNow = true
+				currentPressurePlateLayer = collider
+				
+				var collisionPoint = collision.get_position()
+				var collisionPointInMap = collider.local_to_map(collider.to_local(collisionPoint))
+				
+				currentPressurePlate = collisionPointInMap
+				
+				if collider.get_cell_atlas_coords(collisionPointInMap) == Vector2i(0, 0):
+					get_tree().root.get_node("Root").activate_pressure_plate(collisionPointInMap, collider)
+			if tileMapLayer.name == "Killables":
+				killPlayer()
+
+	if (not isOnPressurePlateNow and isOnPressurePlate) or (currentPressurePlate != pressurePlateCoords and isOnPressurePlate and pressurePlateLayer):
+		get_tree().root.get_node("Root").deactivate_pressure_plate(pressurePlateCoords, pressurePlateLayer)
+	
+	isOnPressurePlate = isOnPressurePlateNow
+	pressurePlateCoords = currentPressurePlate
+	pressurePlateLayer = currentPressurePlateLayer
 
 	move_and_slide()
 	
@@ -110,10 +156,6 @@ func _physics_process(delta: float) -> void:
 		position.x = 500
 	if position.y < -450:
 		position.y = -450
-	if position.y >= 600:
-		print("Dead!")
-		get_parent().respawnPlayer()
-
 
 func _on_coyote_timer_timeout() -> void:
 	coyote = false
