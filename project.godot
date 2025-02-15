@@ -17,7 +17,7 @@ config/icon="res://res/icon.svg"
 
 [autoload]
 
-Icon="*res://src/layer1.gd"
+Icon="*res://src/part1/layer1.gd"
 
 [display]
 
