@@ -16,6 +16,7 @@ var pressurePlateCoords
 var pressurePlateLayer
 
 var canDash = false
+var isActive = false
 
 func killPlayer() -> void:
 	print("Died!")
@@ -30,7 +31,7 @@ func enableDash() -> void:
 	get_tree().root.get_node("Root").reset_switch_regen_count()
 
 func _physics_process(delta: float) -> void:
-	if get_tree().root.get_node("Root").isTransitioning:
+	if get_tree().root.get_node("Root").isTransitioning or not isActive:
 		return
 	
 	# Add the gravity.
@@ -103,7 +104,7 @@ func _physics_process(delta: float) -> void:
 		get_node("Sprite2D").set("flip_h", false)
 	elif direction < 0:
 		get_node("Sprite2D").set("flip_h", true)
-		
+	
 	move_and_slide()
 	
 	var isOnPressurePlateNow = false
@@ -127,7 +128,6 @@ func _physics_process(delta: float) -> void:
 				
 				if collider.get_cell_atlas_coords(collisionPointInMap) == Vector2i(1, 0):
 					collider.set_cell(collisionPointInMap, 0, Vector2i(0, 0))
-					
 					get_tree().root.get_node("Root").set_spawnpoint(collisionPoint)
 			if tileMapLayer.name == "PressurePlates" and collision.get_angle() == 0:
 				isOnPressurePlateNow = true
@@ -142,6 +142,11 @@ func _physics_process(delta: float) -> void:
 					get_tree().root.get_node("Root").activate_pressure_plate(collisionPointInMap, collider)
 			if tileMapLayer.name == "Killables":
 				killPlayer()
+			if tileMapLayer.name == "Portals":
+				var collisionPoint = collision.get_position()
+				var collisionPointInMap = collider.local_to_map(collider.to_local(collisionPoint))
+				
+				get_tree().root.get_node("Root").activate_portal(collisionPointInMap)
 
 	if (not isOnPressurePlateNow and isOnPressurePlate) or (currentPressurePlate != pressurePlateCoords and isOnPressurePlate and pressurePlateLayer):
 		get_tree().root.get_node("Root").deactivate_pressure_plate(pressurePlateCoords, pressurePlateLayer)

@@ -2,43 +2,58 @@ extends Node2D
 
 const NIL_VECTOR2 = Vector2(999, 999)
 
-var activeLayer = 0
+var activeLayer = 1
 
-var loadCount = 0
+# var loadCount = 0
 
 # The amount of times the player had regenerated their Dash ability through switching layers.
 # This is capped to prevent players from flying forever.
 var playerSwitchRegens = 0
 
-var layerOnePosition: Vector2 = NIL_VECTOR2
-var layerTwoPosition: Vector2 = NIL_VECTOR2
+#var layerOnePosition: Vector2 = NIL_VECTOR2
+#var layerTwoPosition: Vector2 = NIL_VECTOR2
+#
+#var layerOneSpawnpoint: Vector2 = NIL_VECTOR2
+#var layerTwoSpawnpoint: Vector2 = NIL_VECTOR2
+#
+#var layerTwoPlatform1Visible: bool = false
+#var layerOnePlatform2Visible: bool = false
 
-var layerOneSpawnpoint: Vector2 = NIL_VECTOR2
-var layerTwoSpawnpoint: Vector2 = NIL_VECTOR2
-
-var layerTwoPlatform1Visible: bool = false
-var layerOnePlatform2Visible: bool = false
+# The current part, this is inserted into the scene name like this: "[currentScenePart]/layerX.tscn"
+var currentScenePart = "part1"
 
 var isTransitioning = false
 
 func showPlatform1():
-	layerTwoPlatform1Visible = true
+	get_node("Layer2").platform1Visible = true
+	# layerTwoPlatform1Visible = true
 	
 func hidePlatform1():
-	layerTwoPlatform1Visible = false
+	get_node("Layer2").platform1Visible = false
+	# layerTwoPlatform1Visible = false
 
 func showPlatform2():
-	layerOnePlatform2Visible = true
+	get_node("Layer1").platform2Visible = true
+	# layerOnePlatform2Visible = true
 	
 func hidePlatform2():
-	layerOnePlatform2Visible = false
+	get_node("Layer1").platform2Visible = false
+	# layerOnePlatform2Visible = false
 
 # Pressure Plates
 var layerOneActivateListeners: Dictionary = {Vector2i(84, 5): showPlatform1}
 var layerOneDeactivateListeners: Dictionary = {Vector2i(84, 5): hidePlatform1}
 
-var layerTwoActivateListeners: Dictionary = {Vector2i(83, 6): showPlatform2}
-var layerTwoDeactivateListeners: Dictionary = {Vector2i(83, 6): hidePlatform2}
+var layerTwoActivateListeners: Dictionary = {Vector2i(95, 4): showPlatform2}
+var layerTwoDeactivateListeners: Dictionary = {Vector2i(95, 4): hidePlatform2}
+
+# portal destinations, these are diff scenes.
+var portalDestinations: Dictionary = {Vector2i(178, 15): "part2"}
+
+func get_active_node() -> Node2D:
+	if activeLayer == 0:
+		return get_node("Layer1")
+	return get_node("Layer2")
 
 func activate_pressure_plate(coords: Vector2i, pressurePlatesLayer: TileMapLayer) -> void:
 	pressurePlatesLayer.set_cell(coords, 0, Vector2i(1, 0))
@@ -62,17 +77,68 @@ func deactivate_pressure_plate(coords: Vector2i, pressurePlatesLayer: TileMapLay
 		if layerTwoDeactivateListeners.has(coords):
 			layerTwoDeactivateListeners.get(coords).call()
 
+func activate_portal(coords: Vector2i) -> void:
+	if portalDestinations.has(coords):
+		currentScenePart = portalDestinations.get(coords)
+		
+		#layerOnePosition = NIL_VECTOR2
+		#layerTwoPosition = NIL_VECTOR2
+		
+		#layerOneSpawnpoint = NIL_VECTOR2
+		#layerTwoSpawnpoint = NIL_VECTOR2
+		
+		#layerTwoPlatform1Visible = false
+		#layerOnePlatform2Visible = false
+		
+		activeLayer = 1
+		
+		for child in get_children():
+			child.queue_free()
+			await child.tree_exited
+			
+		var loadingScreen = load("res://scenes/loading_screen.tscn") as PackedScene
+		var loadingScreenNode = loadingScreen.instantiate()
+		add_child(loadingScreenNode)
+		move_child(loadingScreenNode, 1)
+		
+		var twoSecondTimer = get_tree().create_timer(2)
+		
+		loadLayers()
+		
+		var player = get_active_node().get_node("Player")
+		
+		var playerCamera = Camera2D.new()
+		playerCamera.name = "Camera"
+		
+		loadingScreenNode.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
+		
+		# gross hack to make sure the loading screen is diplayed in full no matter the players scale
+		loadingScreenNode.set("position", -((Vector2(0.5, 0.5) / player.get("scale")) * Vector2(1152, 648)))
+		
+		loadingScreenNode.reparent(playerCamera, false)
+		
+		player.add_child(playerCamera)
+		
+		switchLayers()
+		
+		# serve that beautiful loading screen for a while, the reason its defined in the back is because..
+		# in case the loading process actually does take a while for some reason, we shouldn't delay..
+		# the loading process unnecessarily.
+		await twoSecondTimer.timeout
+		
+		loadingScreenNode.queue_free()
+
 func reset_switch_regen_count() -> void:
 	playerSwitchRegens = 0
 
 # Spawnpoint states don't persist across layer loads, so we have to keep it in the root node.
 func set_spawnpoint(spawnPoint: Vector2) -> void:
-	if activeLayer == 0:
-		layerOneSpawnpoint = spawnPoint
-	else:
-		layerTwoSpawnpoint = spawnPoint
+	#if activeLayer == 0:
+		#layerOneSpawnpoint = spawnPoint
+	#else:
+		#layerTwoSpawnpoint = spawnPoint
 	
-	get_child(0).get_node("SpawnPoint").set("position", spawnPoint)
+	get_active_node().get_node("SpawnPoint").set("position", spawnPoint)
 
 # https://www.reddit.com/r/godot/comments/40cm3w/comment/idf9vth/
 func get_children_recursive(node: Node) -> Array:
@@ -85,101 +151,88 @@ func get_children_recursive(node: Node) -> Array:
 			nodes.append(N)
 	return nodes
 
-func loadLayer(layer: int) -> void:
-	loadCount += 1
+func loadLayers() -> void:
+	# loadCount += 1
+	var layerOne = load("res://scenes/" + currentScenePart + "/layer1.tscn")
+	var layerTwo = load("res://scenes/" + currentScenePart + "/layer2.tscn")
 	
-	var resource = null
+	var layerOneScene = layerOne as PackedScene
+	var layerTwoScene = layerTwo as PackedScene
 	
-	if layer == 0:
-		resource = load("res://scenes/layer1.tscn")
-	else:
-		resource = load("res://scenes/layer2.tscn")
+	var layerOneNode = layerOneScene.instantiate()
+	var layerTwoNode = layerTwoScene.instantiate()
 	
-	var scene = resource as PackedScene
+	#if (layerOneSpawnpoint != NIL_VECTOR2):
+		#layerOneNode.get_node("SpawnPoint").set("position", layerOneSpawnpoint)
+	#if (layerOnePosition == NIL_VECTOR2):
+		#layerOneNode.respawnPlayer()
+	#else:
+		#layerOneNode.get_node("Player").set("position", layerOnePosition)
 	
-	var sceneNode = scene.instantiate()
+	#if layerOneNode.has_node("Platform2"):
+		#var platform2 = layerOneNode.get_node("Platform2")
+		#
+		#platform2.set("enabled", layerOnePlatform2Visible)
+	#
+		#for child in get_children_recursive(platform2):
+			#child.set("enabled", layerOnePlatform2Visible)
 	
-	if layer == 0:
-		# disable all pressure plates here
-		for k in layerOneDeactivateListeners:
-			layerOneDeactivateListeners[k].call()
+	#if (layerTwoSpawnpoint != NIL_VECTOR2):
+		#layerTwoNode.get_node("SpawnPoint").set("position", layerTwoSpawnpoint)
+	#if (layerTwoPosition == NIL_VECTOR2):
+		#layerTwoNode.respawnPlayer()
+	#else:
+		#layerTwoNode.get_node("Player").set("position", layerTwoPosition)
 		
-		if (layerOneSpawnpoint != NIL_VECTOR2):
-			sceneNode.get_node("SpawnPoint").set("position", layerOneSpawnpoint)
-		if (layerOnePosition == NIL_VECTOR2):
-			sceneNode.respawnPlayer()
-		else:
-			sceneNode.get_node("Player").set("position", layerOnePosition)
-		
-		var platform2 = sceneNode.get_node("Platform2")
-		platform2.set("enabled", layerOnePlatform2Visible)
-		
-		for child in get_children_recursive(platform2):
-			child.set("enabled", layerOnePlatform2Visible)
-	elif layer == 1:
-		# disable all pressure plates here
-		for k in layerTwoDeactivateListeners:
-			layerTwoDeactivateListeners[k].call()
-		
-		if (layerTwoSpawnpoint != NIL_VECTOR2):
-			sceneNode.get_node("SpawnPoint").set("position", layerTwoSpawnpoint)
-		if (layerTwoPosition == NIL_VECTOR2):
-			sceneNode.respawnPlayer()
-		else:
-			sceneNode.get_node("Player").set("position", layerTwoPosition)
-			
-		var platform1 = sceneNode.get_node("Platform1")
-		platform1.set("enabled", layerTwoPlatform1Visible)
-		
-		for child in get_children_recursive(platform1):
-			child.set("enabled", layerTwoPlatform1Visible)
+	#if layerTwoNode.has_node("Platform1"):
+		#var platform1 = layerTwoNode.get_node("Platform1")
+		#
+		#platform1.set("enabled", layerTwoPlatform1Visible)
+	#
+		#for child in get_children_recursive(platform1):
+			#child.set("enabled", layerTwoPlatform1Visible)
 	
-	if loadCount == 3:
-		sceneNode.get_node("Label").set("text", "Press V to dash!")
-	elif loadCount == 4:
-		sceneNode.get_node("Label").set("text", "Thanks for reading!")
-	# imagine
-	elif loadCount == 50:
-		sceneNode.get_node("Label").set("text", "You can stop now..")
-	elif loadCount > 4:
-		sceneNode.get_node("Label").queue_free()
-		
-	add_child(sceneNode)
+	add_child(layerOneNode, true)
+	add_child(layerTwoNode, true)
 
 func respawnPlayer():
-	# Invalidate both to prevent the player from simply switching, then switching again in-place
-	layerOnePosition = NIL_VECTOR2
-	layerTwoPosition = NIL_VECTOR2
-	
-	get_child(0).respawnPlayer()
+	get_node("Layer1").respawnPlayer()
+	get_node("Layer2").respawnPlayer()
 
 func switchLayers():
 	if isTransitioning:
 		return
 	isTransitioning = true
 	
-	if activeLayer == 0:
-		layerOnePosition = get_child(get_child_count() - 1).get_node("Player").get("position")
-	elif activeLayer == 1:
-		layerTwoPosition = get_child(get_child_count() - 1).get_node("Player").get("position")
+	#if activeLayer == 0:
+		#get_node("Layer1/Player").get("position")
+	#elif activeLayer == 1:
+		#layerTwoPosition = get_child(get_child_count() - 1).get_node("Player").get("position")
+	
+	var oldLayer: Node = get_active_node()
 	
 	activeLayer = (activeLayer + 1) % 2
 	
-	loadLayer(activeLayer)
+	# loadLayers()
+	var newLayer: Node = get_active_node()
 	
-	var oldLayer = get_child(get_child_count() - 2)
-	var newLayer = get_child(get_child_count() - 1)
-	
-	if oldLayer.get_node("Player").canDash:
-		newLayer.get_node("Player").canDash = true
-	elif playerSwitchRegens < 2:
-		playerSwitchRegens += 1
+	if playerSwitchRegens < 2 or oldLayer.get_node("Player").canDash:
+		if not oldLayer.get_node("Player").canDash:
+			playerSwitchRegens += 1
 		newLayer.get_node("Player").canDash = true
 	
 	newLayer.set("modulate:a", 0)
 	
 	var camera = oldLayer.get_node("Player/Camera")
 	camera.reparent(newLayer.get_node("Player"))
+	
+	for child in get_children_recursive(newLayer):
+		# can it be disabled?
+		if child.get("disabled") != null:
+			child.set("disabled", false)
+			
+		if child.get("enabled") != null:
+			child.set("enabled", true)
 	
 	var tween = get_tree().create_tween()
 	tween.set_parallel(true)
@@ -191,7 +244,22 @@ func switchLayers():
 	
 	await tween.finished
 	
-	oldLayer.queue_free()
+	for child in get_children_recursive(oldLayer):
+		# can it be disabled?
+		if child.get("disabled") != null:
+			child.set("disabled", true)
+			
+		if child.get("enabled") != null:
+			child.set("enabled", false)
+	
+	oldLayer.get_node("Player").isActive = false
+	newLayer.get_node("Player").isActive = true
+	
+	newLayer.initialize()
+	
+	#tween.tween_property(oldLayer.get_node("Player/CollisionShape2D"), "disabled", true, 0)
+	#tween.tween_property(newLayer.get_node("Player/CollisionShape2D"), "disabled", false, 0)
+	
 	isTransitioning = false
 
 func _input(event: InputEvent) -> void:
@@ -199,19 +267,20 @@ func _input(event: InputEvent) -> void:
 		switchLayers()
 	elif Input.is_action_just_pressed("teleport-second-player"):
 		if activeLayer == 0:
-			layerTwoPosition = get_child(0).get_node("Player").get("position")
+			get_node("Layer2/Player").set("position", get_node("Layer1/Player").get("position"))
 		elif activeLayer == 1:
-			layerOnePosition = get_child(0).get_node("Player").get("position")
+			get_node("Layer1/Player").set("position", get_node("Layer2/Player").get("position"))
 		
 		switchLayers()
 		
-		get_child(0).get_node("Player").canDash = true
-		get_child(0).get_node("Player").set("velocity:y", 0)
+		get_active_node().get_node("Player").set("velocity:y", 0)
 
 func _ready() -> void:
-	loadLayer(activeLayer)
+	loadLayers()
 	
 	var playerCamera = Camera2D.new()
 	playerCamera.name = "Camera"
 	
-	get_child(activeLayer).get_node("Player").add_child(playerCamera)
+	get_active_node().get_node("Player").add_child(playerCamera)
+	
+	switchLayers()
