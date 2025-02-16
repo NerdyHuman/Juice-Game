@@ -2,6 +2,9 @@ extends Node2D
 
 const NIL_VECTOR2 = Vector2(999, 999)
 
+const UtilRes = preload("res://src/util.gd")
+var Util
+
 var activeLayer = 1
 
 # var loadCount = 0
@@ -20,32 +23,9 @@ var playerSwitchRegens = 0
 #var layerOnePlatform2Visible: bool = false
 
 # The current part, this is inserted into the scene name like this: "[currentScenePart]/layerX.tscn"
-var currentScenePart = "part1"
+var currentScenePart = "part2"
 
 var isTransitioning = false
-
-func showPlatform1():
-	get_node("Layer2").platform1Visible = true
-	# layerTwoPlatform1Visible = true
-	
-func hidePlatform1():
-	get_node("Layer2").platform1Visible = false
-	# layerTwoPlatform1Visible = false
-
-func showPlatform2():
-	get_node("Layer1").platform2Visible = true
-	# layerOnePlatform2Visible = true
-	
-func hidePlatform2():
-	get_node("Layer1").platform2Visible = false
-	# layerOnePlatform2Visible = false
-
-# Pressure Plates
-var layerOneActivateListeners: Dictionary = {Vector2i(84, 5): showPlatform1}
-var layerOneDeactivateListeners: Dictionary = {Vector2i(84, 5): hidePlatform1}
-
-var layerTwoActivateListeners: Dictionary = {Vector2i(95, 4): showPlatform2}
-var layerTwoDeactivateListeners: Dictionary = {Vector2i(95, 4): hidePlatform2}
 
 # portal destinations, these are diff scenes.
 var portalDestinations: Dictionary = {Vector2i(178, 15): "part2"}
@@ -54,28 +34,6 @@ func get_active_node() -> Node2D:
 	if activeLayer == 0:
 		return get_node("Layer1")
 	return get_node("Layer2")
-
-func activate_pressure_plate(coords: Vector2i, pressurePlatesLayer: TileMapLayer) -> void:
-	pressurePlatesLayer.set_cell(coords, 0, Vector2i(1, 0))
-	
-	# call the callable
-	if activeLayer == 0:
-		if layerOneActivateListeners.has(coords):
-			layerOneActivateListeners.get(coords).call()
-	else:
-		if layerTwoActivateListeners.has(coords):
-			layerTwoActivateListeners.get(coords).call()
-
-func deactivate_pressure_plate(coords: Vector2i, pressurePlatesLayer: TileMapLayer) -> void:
-	pressurePlatesLayer.set_cell(coords, 0, Vector2i(0, 0))
-	
-	# call the callable
-	if activeLayer == 0:
-		if layerOneDeactivateListeners.has(coords):
-			layerOneDeactivateListeners.get(coords).call()
-	else:
-		if layerTwoDeactivateListeners.has(coords):
-			layerTwoDeactivateListeners.get(coords).call()
 
 func activate_portal(coords: Vector2i) -> void:
 	if portalDestinations.has(coords):
@@ -139,17 +97,6 @@ func set_spawnpoint(spawnPoint: Vector2) -> void:
 		#layerTwoSpawnpoint = spawnPoint
 	
 	get_active_node().get_node("SpawnPoint").set("position", spawnPoint)
-
-# https://www.reddit.com/r/godot/comments/40cm3w/comment/idf9vth/
-func get_children_recursive(node: Node) -> Array:
-	var nodes : Array = []
-	for N in node.get_children():
-		if N.get_child_count() > 0:
-			nodes.append(N)
-			nodes.append_array(get_children_recursive(N))
-		else:
-			nodes.append(N)
-	return nodes
 
 func loadLayers() -> void:
 	# loadCount += 1
@@ -226,7 +173,7 @@ func switchLayers():
 	var camera = oldLayer.get_node("Player/Camera")
 	camera.reparent(newLayer.get_node("Player"))
 	
-	for child in get_children_recursive(newLayer):
+	for child in Util.get_children_recursive(newLayer):
 		# can it be disabled?
 		if child.get("disabled") != null:
 			child.set("disabled", false)
@@ -244,7 +191,7 @@ func switchLayers():
 	
 	await tween.finished
 	
-	for child in get_children_recursive(oldLayer):
+	for child in Util.get_children_recursive(oldLayer):
 		# can it be disabled?
 		if child.get("disabled") != null:
 			child.set("disabled", true)
@@ -276,6 +223,7 @@ func _input(event: InputEvent) -> void:
 		get_active_node().get_node("Player").set("velocity:y", 0)
 
 func _ready() -> void:
+	Util = UtilRes.new()
 	loadLayers()
 	
 	var playerCamera = Camera2D.new()
