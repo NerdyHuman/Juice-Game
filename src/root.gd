@@ -23,7 +23,7 @@ var playerSwitchRegens = 0
 #var layerOnePlatform2Visible: bool = false
 
 # The current part, this is inserted into the scene name like this: "[currentScenePart]/layerX.tscn"
-var currentScenePart = "part2"
+var currentScenePart = "part1"
 
 var isTransitioning = false
 
