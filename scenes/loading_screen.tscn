@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://qptj2wohekhp"]
 
-[ext_resource type="Texture2D" uid="uid://dho15202lln84" path="res://res/knight.png" id="1_yii23"]
+[ext_resource type="Texture2D" uid="uid://cwwsdmqd8mw37" path="res://res/knight.png" id="1_yii23"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n1j5h"]
 bg_color = Color(0.147672, 0.147672, 0.147672, 1)

@@ -37,6 +37,8 @@ func initialize() -> void:
 	for child in Util.get_children_recursive(get_node("Platform3")):
 		child.set("visible", platform3Visible)
 		child.set("enabled", platform3Visible)
+		child.set("collision_enabled", platform3Visible)
 	
 	get_node("Platform3").set("visible", platform3Visible)
 	get_node("Platform3").set("enabled", platform3Visible)
+	get_node("Platform3").set("collision_enabled", platform3Visible)

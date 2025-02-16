@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=4 uid="uid://c36k8h1gk20c1"]
+[gd_scene load_steps=29 format=4 uid="uid://c36k8h1gk20c1"]
 
 [ext_resource type="Script" path="res://src/part2/layer1.gd" id="1_kh8in"]
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="2_hd64o"]
@@ -121,38 +121,6 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_xexwr")
 sources/0 = SubResource("TileSetAtlasSource_7il85")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vlcwy"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e0gv8"]
-texture = ExtResource("4_chjvs")
-0:0/0 = 0
-0:0/0/terrain_set = 0
-0:0/0/terrain = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 8, 8, -8, -8, -8, -8, 8)
-0:0/0/terrains_peering_bit/right_side = 0
-0:0/0/terrains_peering_bit/bottom_side = 0
-0:0/0/terrains_peering_bit/left_side = 0
-0:0/0/terrains_peering_bit/top_side = 0
-1:0/0 = 0
-1:0/0/terrain_set = 0
-1:0/0/terrain = 0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
-1:0/0/terrains_peering_bit/right_side = 0
-1:0/0/terrains_peering_bit/bottom_side = 0
-1:0/0/terrains_peering_bit/left_side = 0
-1:2/0 = 0
-1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, -8, -8, 8, -8, 8, 8)
-1:1/0 = 0
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
-
-[sub_resource type="TileSet" id="TileSet_06h52"]
-physics_layer_0/collision_layer = 1
-physics_layer_0/physics_material = SubResource("PhysicsMaterial_vlcwy")
-terrain_set_0/mode = 2
-terrain_set_0/terrain_0/name = "Terrain"
-terrain_set_0/terrain_0/color = Color(0.202223, 0.447071, 0.226919, 1)
-sources/0 = SubResource("TileSetAtlasSource_e0gv8")
-
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_l1ypx"]
 distance = -1000.0
 
@@ -211,7 +179,7 @@ tile_set = SubResource("TileSet_vpr42")
 [node name="Platform3" type="TileMapLayer" parent="."]
 scale = Vector2(4.5, 4.5)
 tile_map_data = PackedByteArray("AABBABUAAAAAAAAAAABBABQAAAABAAAAAABAABUAAAAAAAAAAABAABQAAAABAAAAAAA1ABUAAAABAAAAAAA6ABYAAAAAAAAAAAA6ABUAAAABAAAAAAA5ABYAAAAAAAAAAAA5ABUAAAABAAAAAAA4ABYAAAAAAAAAAAA4ABUAAAABAAAAAAA3ABYAAAAAAAAAAAA3ABUAAAABAAAAAAA2ABYAAAAAAAAAAAA2ABUAAAABAAAAAAA1ABYAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_06h52")
+tile_set = SubResource("TileSet_j23oo")
 
 [node name="JumpPads" type="TileMapLayer" parent="Platform3"]
 tile_map_data = PackedByteArray("AABFABQAAAACAAAAAABKABIAAAACAAAAAAA=")
