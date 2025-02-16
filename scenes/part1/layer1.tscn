@@ -1,10 +1,11 @@
-[gd_scene load_steps=31 format=4 uid="uid://cqxxkpprmeopl"]
+[gd_scene load_steps=32 format=4 uid="uid://cqxxkpprmeopl"]
 
 [ext_resource type="Script" path="res://src/part1/layer1.gd" id="1_nbryd"]
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="2_qj6yd"]
 [ext_resource type="Texture2D" uid="uid://bhhuv1oaet3s4" path="res://res/player_princess.png" id="3_52sbr"]
 [ext_resource type="Texture2D" uid="uid://datqb6kgrju16" path="res://res/Sprite-0005.png" id="4_5lm5s"]
 [ext_resource type="Texture2D" uid="uid://ch6ol1khk4us" path="res://res/Sprite-0002.png" id="5_77fdk"]
+[ext_resource type="Texture2D" uid="uid://c0ke1bevjxudp" path="res://res/Sprite-0008.png" id="5_hf4xt"]
 [ext_resource type="Texture2D" uid="uid://clqxd83fj01gd" path="res://res/Sprite-0003.png" id="6_i3u0x"]
 [ext_resource type="Texture2D" uid="uid://c2m3bjukgs83l" path="res://res/Sprite-0004.png" id="7_4c4ej"]
 
@@ -45,18 +46,19 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_vlcwy")
 sources/0 = SubResource("TileSetAtlasSource_e0gv8")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yb7jq"]
-texture = ExtResource("4_5lm5s")
-0:1/size_in_atlas = Vector2i(1, 2)
-0:1/next_alternative_id = 2
-0:1/0 = 0
-0:1/0/texture_origin = Vector2i(0, -8)
-0:1/1 = 1
-0:1/1/texture_origin = Vector2i(0, -8)
-0:1/1/z_index = -1
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q2qeu"]
+texture = ExtResource("5_hf4xt")
+2:0/size_in_atlas = Vector2i(1, 2)
+2:0/next_alternative_id = 2
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -8)
+2:0/0/z_index = 1
+2:0/1 = 1
+2:0/1/texture_origin = Vector2i(0, -8)
+2:0/1/z_index = -1
 
-[sub_resource type="TileSet" id="TileSet_i4xa1"]
-sources/1 = SubResource("TileSetAtlasSource_yb7jq")
+[sub_resource type="TileSet" id="TileSet_mcq0l"]
+sources/1 = SubResource("TileSetAtlasSource_q2qeu")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_w5wvd"]
 
@@ -158,8 +160,8 @@ tile_set = SubResource("TileSet_06h52")
 
 [node name="Trees" type="TileMapLayer" parent="."]
 scale = Vector2(4.5, 4.5)
-tile_map_data = PackedByteArray("AAALAAMAAQAAAAEAAAAKAAMAAQAAAAEAAAAMAAMAAQAAAAEAAQANAAMAAQAAAAEAAQAOAAMAAQAAAAEAAQAPAAMAAQAAAAEAAQA=")
-tile_set = SubResource("TileSet_i4xa1")
+tile_map_data = PackedByteArray("AAALAAMAAQACAAAAAAAKAAMAAQACAAAAAAAMAAMAAQACAAAAAQANAAMAAQACAAAAAQAOAAMAAQACAAAAAQAPAAMAAQACAAAAAQA=")
+tile_set = SubResource("TileSet_mcq0l")
 
 [node name="Checkpoints" type="TileMapLayer" parent="."]
 scale = Vector2(4.5, 4.5)

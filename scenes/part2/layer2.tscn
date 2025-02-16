@@ -1,9 +1,10 @@
-[gd_scene load_steps=26 format=4 uid="uid://bdltm366oiewi"]
+[gd_scene load_steps=27 format=4 uid="uid://bdltm366oiewi"]
 
 [ext_resource type="Script" path="res://src/part2/layer2.gd" id="1_tjr7n"]
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="2_na7yo"]
 [ext_resource type="Texture2D" uid="uid://dsy01hshd7q70" path="res://res/player_knight.png" id="3_j82fq"]
 [ext_resource type="Texture2D" uid="uid://datqb6kgrju16" path="res://res/Sprite-0005.png" id="4_e3f21"]
+[ext_resource type="Texture2D" uid="uid://c0ke1bevjxudp" path="res://res/Sprite-0008.png" id="5_7bb0n"]
 [ext_resource type="Texture2D" uid="uid://ch6ol1khk4us" path="res://res/Sprite-0002.png" id="5_h2g73"]
 [ext_resource type="Texture2D" uid="uid://bvk540622e1k3" path="res://res/Sprite-0006.png" id="6_e8w0d"]
 [ext_resource type="Texture2D" uid="uid://clqxd83fj01gd" path="res://res/Sprite-0003.png" id="7_2w3bl"]
@@ -30,12 +31,12 @@ sources/0 = SubResource("TileSetAtlasSource_tk488")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0onf6"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_86as6"]
-texture = ExtResource("4_e3f21")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tde6l"]
+texture = ExtResource("5_7bb0n")
 0:0/0 = 0
 0:0/0/terrain_set = 0
 0:0/0/terrain = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 8, 8, -8, -8, -8, -8, 8)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 0:0/0/terrains_peering_bit/right_side = 0
 0:0/0/terrains_peering_bit/bottom_side = 0
 0:0/0/terrains_peering_bit/left_side = 0
@@ -56,7 +57,7 @@ physics_layer_0/physics_material = SubResource("PhysicsMaterial_0onf6")
 terrain_set_0/mode = 2
 terrain_set_0/terrain_0/name = "Terrain"
 terrain_set_0/terrain_0/color = Color(5.29438e-07, 0.465642, 0.187337, 1)
-sources/0 = SubResource("TileSetAtlasSource_86as6")
+sources/0 = SubResource("TileSetAtlasSource_tde6l")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e1mhf"]
 
