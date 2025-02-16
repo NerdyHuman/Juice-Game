@@ -162,6 +162,7 @@ func switchLayers():
 	
 	# loadLayers()
 	var newLayer: Node = get_active_node()
+	newLayer.initialize()
 	
 	if playerSwitchRegens < 2 or oldLayer.get_node("Player").canDash:
 		if not oldLayer.get_node("Player").canDash:
@@ -202,7 +203,6 @@ func switchLayers():
 	oldLayer.get_node("Player").isActive = false
 	newLayer.get_node("Player").isActive = true
 	
-	newLayer.initialize()
 	
 	#tween.tween_property(oldLayer.get_node("Player/CollisionShape2D"), "disabled", true, 0)
 	#tween.tween_property(newLayer.get_node("Player/CollisionShape2D"), "disabled", false, 0)
