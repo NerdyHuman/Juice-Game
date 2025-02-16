@@ -202,7 +202,10 @@ func switchLayers():
 	
 	oldLayer.get_node("Player").isActive = false
 	newLayer.get_node("Player").isActive = true
+	newLayer.get_node("Player").set("velocity", Vector2(0, 0))
 	
+	if newLayer.has_method("post_init"):
+		newLayer.post_init()
 	
 	#tween.tween_property(oldLayer.get_node("Player/CollisionShape2D"), "disabled", true, 0)
 	#tween.tween_property(newLayer.get_node("Player/CollisionShape2D"), "disabled", false, 0)
@@ -219,8 +222,11 @@ func _input(event: InputEvent) -> void:
 			get_node("Layer1/Player").set("position", get_node("Layer2/Player").get("position"))
 		
 		switchLayers()
-		
-		get_active_node().get_node("Player").set("velocity:y", 0)
+
+func _physics_process(delta: float) -> void:
+	if currentScenePart == "part1":
+		get_node("Layer1").update_glyphs()
+		get_node("Layer2").update_glyphs()
 
 func _ready() -> void:
 	Util = UtilRes.new()
