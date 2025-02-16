@@ -139,7 +139,7 @@ func _physics_process(delta: float) -> void:
 				currentPressurePlate = collisionPointInMap
 				
 				if collider.get_cell_atlas_coords(collisionPointInMap) == Vector2i(0, 0):
-					get_tree().root.get_node("Root").activate_pressure_plate(collisionPointInMap, collider)
+					get_parent().activate_pressure_plate(collisionPointInMap, collider)
 			if tileMapLayer.name == "Killables":
 				killPlayer()
 			if tileMapLayer.name == "Portals":
@@ -149,7 +149,7 @@ func _physics_process(delta: float) -> void:
 				get_tree().root.get_node("Root").activate_portal(collisionPointInMap)
 
 	if (not isOnPressurePlateNow and isOnPressurePlate) or (currentPressurePlate != pressurePlateCoords and isOnPressurePlate and pressurePlateLayer):
-		get_tree().root.get_node("Root").deactivate_pressure_plate(pressurePlateCoords, pressurePlateLayer)
+		get_parent().deactivate_pressure_plate(pressurePlateCoords, pressurePlateLayer)
 	
 	isOnPressurePlate = isOnPressurePlateNow
 	pressurePlateCoords = currentPressurePlate
