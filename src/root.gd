@@ -23,12 +23,12 @@ var playerSwitchRegens = 0
 #var layerOnePlatform2Visible: bool = false
 
 # The current part, this is inserted into the scene name like this: "[currentScenePart]/layerX.tscn"
-var currentScenePart = "part1"
+var currentScenePart = "part2"
 
 var isTransitioning = false
 
 # portal destinations, these are diff scenes.
-var portalDestinations: Dictionary = {Vector2i(178, 15): "part2"}
+var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "end"}
 
 func get_active_node() -> Node2D:
 	if activeLayer == 0:
@@ -53,6 +53,13 @@ func activate_portal(coords: Vector2i) -> void:
 		for child in get_children():
 			child.queue_free()
 			await child.tree_exited
+		
+		if currentScenePart == "end":
+			var endScreen = load("res://scenes/end.tscn") as PackedScene
+			var endScreenNode = endScreen.instantiate()
+			add_child(endScreenNode)
+			
+			return
 			
 		var loadingScreen = load("res://scenes/loading_screen.tscn") as PackedScene
 		var loadingScreenNode = loadingScreen.instantiate()
@@ -64,6 +71,11 @@ func activate_portal(coords: Vector2i) -> void:
 		loadLayers()
 		
 		var player = get_active_node().get_node("Player")
+		
+		# the last 2 lines dont work for some reason
+		player.isActive = false
+		player.get_node("PointLight2D").set("enabled", false)
+		player.get_node("PointLight2D").set("shadow_enabled", false)
 		
 		var playerCamera = Camera2D.new()
 		playerCamera.name = "Camera"
@@ -83,6 +95,10 @@ func activate_portal(coords: Vector2i) -> void:
 		# in case the loading process actually does take a while for some reason, we shouldn't delay..
 		# the loading process unnecessarily.
 		await twoSecondTimer.timeout
+		
+		player.isActive = true
+		player.get_node("PointLight2D").set("enabled", true)
+		player.get_node("PointLight2D").set("shadow_enabled", true)
 		
 		loadingScreenNode.queue_free()
 
@@ -147,7 +163,7 @@ func respawnPlayer():
 	get_node("Layer2").respawnPlayer()
 
 func switchLayers():
-	if isTransitioning:
+	if isTransitioning or currentScenePart == "end":
 		return
 	isTransitioning = true
 	
@@ -213,6 +229,9 @@ func switchLayers():
 	isTransitioning = false
 
 func _input(event: InputEvent) -> void:
+	if currentScenePart == "end":
+		return
+	
 	if Input.is_action_just_pressed("switch-layer"):
 		switchLayers()
 	elif Input.is_action_just_pressed("teleport-second-player"):

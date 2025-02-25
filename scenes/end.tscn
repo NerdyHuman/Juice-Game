@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=3 uid="uid://bdbm2iktlmcgc"]
+
+[ext_resource type="Script" path="res://src/end.gd" id="1_dwkb5"]
+[ext_resource type="Texture2D" uid="uid://cwwsdmqd8mw37" path="res://res/knight.png" id="1_plga5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n1j5h"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SystemFont" id="SystemFont_ajca3"]
+font_names = PackedStringArray("Jost")
+
+[sub_resource type="LabelSettings" id="LabelSettings_6nqt3"]
+font = SubResource("SystemFont_ajca3")
+font_size = 36
+outline_size = 6
+outline_color = Color(0, 0, 0, 1)
+
+[node name="EndingScreen" type="Control"]
+z_index = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+script = ExtResource("1_dwkb5")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 5760.0
+offset_bottom = 3240.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_n1j5h")
+
+[node name="Credits" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CenterContainer" type="CenterContainer" parent="Credits"]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+scale = Vector2(5, 5)
+
+[node name="Label" type="Label" parent="Credits/CenterContainer"]
+layout_mode = 2
+text = "Game submitted for Juice by:
+- BurntRanch
+- Pulkit Parmar [NerdyHuman]
+- Toni500"
+label_settings = SubResource("LabelSettings_6nqt3")
+horizontal_alignment = 1
+
+[node name="ThankYou" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ThankYou"]
+layout_mode = 2
+offset_left = -500.0
+offset_right = 148.0
+offset_bottom = 660.0
+scale = Vector2(5, 5)
+
+[node name="TextureRect" type="TextureRect" parent="ThankYou/VBoxContainer"]
+custom_minimum_size = Vector2(648, 0)
+layout_mode = 2
+texture = ExtResource("1_plga5")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="CenterContainer" type="CenterContainer" parent="ThankYou"]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+scale = Vector2(5, 5)
+
+[node name="Label" type="Label" parent="ThankYou/CenterContainer"]
+layout_mode = 2
+text = "Thank you for playing."
+label_settings = SubResource("LabelSettings_6nqt3")
+horizontal_alignment = 1
