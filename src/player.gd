@@ -25,6 +25,8 @@ var lastMovingPlatformCell
 var canDash = false
 var isActive = false
 
+var grabbedKey: StaticBody2D = null
+
 func killPlayer() -> void:
 	print("Died!")
 	get_tree().root.get_node("Root").respawnPlayer()
@@ -79,33 +81,30 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("dash") and canDash:
 		var verticalDirection := Input.get_axis("look-up", "look-down")
 		
-		canDash = false
-		
-		get_node("DashSFX").play()
-		
 		# Origin of the raycast, offset by 5 to prevent intentional glitching
 		var origin = (position + Vector2(5 * sign(direction), 5 * sign(verticalDirection)))
 		var positionOffset = Vector2(200 * sign(direction), 200 * sign(verticalDirection))
-		velocity = positionOffset
 		
-		var space_state = get_world_2d().direct_space_state
-		var query = PhysicsRayQueryParameters2D.create(origin, position + positionOffset)
-		var result = space_state.intersect_ray(query)
+		if positionOffset != Vector2(0, 0):
+			canDash = false
+			
+			get_node("DashSFX").play()
 		
-		var tween = get_tree().create_tween()
-		tween.set_trans(Tween.TRANS_QUART)
-		tween.set_ease(Tween.EASE_IN_OUT)
-		
-		#if get_child(1).get("flip_h"):
-		if result:
-			tween.tween_property(self, "position", result.position - Vector2(10 * sign(direction), 20 * sign(verticalDirection)), 0.2)
-		else:
-			tween.tween_property(self, "position", position + positionOffset, 0.2)
-		#else:
-			#if resultNegative:
-				#tween.tween_property(self, "position", resultNegative.position, 0.1)
-			#else:
-				#tween.tween_property(self, "position", position - positionOffset, 0.1)
+			velocity = positionOffset
+			
+			var space_state = get_world_2d().direct_space_state
+			var query = PhysicsRayQueryParameters2D.create(origin, position + positionOffset)
+			var result = space_state.intersect_ray(query)
+			
+			var tween = get_tree().create_tween()
+			tween.set_trans(Tween.TRANS_QUART)
+			tween.set_ease(Tween.EASE_IN_OUT)
+			
+			#if get_child(1).get("flip_h"):
+			if result:
+				tween.tween_property(self, "position", result.position - Vector2(10 * sign(direction), 20 * sign(verticalDirection)), 0.2)
+			else:
+				tween.tween_property(self, "position", position + positionOffset, 0.2)
 	
 	if direction > 0:
 		get_node("Sprite2D").set("flip_h", false)
@@ -163,13 +162,19 @@ func _physics_process(delta: float) -> void:
 				activatedMovingPlatform = collider
 				movingPlatformCell = collisionPointInMap
 			if tileMapLayer.name == "Doors":
-				# attempt to fix the missing cell
-				if collider.get_cell_tile_data(collisionPointInMap) == null:
-					for cell in collider.get_surrounding_cells(collisionPointInMap):
-						if collider.get_cell_tile_data(cell):
+				# try to find the real collision point if it isnt right
+				if tileMapLayer.get_cell_tile_data(collisionPointInMap) == null:
+					for cell in tileMapLayer.get_surrounding_cells(collisionPointInMap):
+						if tileMapLayer.get_cell_tile_data(cell) != null:
 							collisionPointInMap = cell
+							break
 				
-				collider.toggle(collisionPointInMap)
+				if grabbedKey != null and grabbedKey.targetDoorCoords == collisionPointInMap:
+					#grabbedKey.queue_free()
+					#tileMapLayer.set_cell(collisionPointInMap)
+					#
+					#grabbedKey = null
+					tileMapLayer.openDoor(grabbedKey, collisionPointInMap)
 			if tileMapLayer.name == "Generators":
 				# attempt to fix the missing cell
 				if collider.get_cell_tile_data(collisionPointInMap) == null:
@@ -179,7 +184,6 @@ func _physics_process(delta: float) -> void:
 				
 				generator_count += 1
 				collider.set_cell(collisionPointInMap)
-			
 		elif collider is StaticBody2D:
 			var staticBody = collider as StaticBody2D
 			
@@ -187,7 +191,8 @@ func _physics_process(delta: float) -> void:
 				# disable its collision
 				staticBody.get_node("CollisionShape2D").disabled = true
 				staticBody.picked_up_by = self
-				staticBody.is_picked_up = true
+				
+				grabbedKey = staticBody
 
 	if (not isOnPressurePlateNow and isOnPressurePlate) or (currentPressurePlate != pressurePlateCoords and isOnPressurePlate and pressurePlateLayer):
 		get_parent().deactivate_pressure_plate(pressurePlateCoords, pressurePlateLayer)

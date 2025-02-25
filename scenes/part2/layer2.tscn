@@ -2,16 +2,16 @@
 
 [ext_resource type="Script" path="res://src/part2/layer2.gd" id="1_tjr7n"]
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="2_na7yo"]
-[ext_resource type="Texture2D" uid="uid://dsy01hshd7q70" path="res://res/player_knight.png" id="3_j82fq"]
-[ext_resource type="Texture2D" uid="uid://datqb6kgrju16" path="res://res/Sprite-0005.png" id="4_e3f21"]
-[ext_resource type="Texture2D" uid="uid://c0ke1bevjxudp" path="res://res/Sprite-0008.png" id="5_7bb0n"]
-[ext_resource type="Texture2D" uid="uid://ch6ol1khk4us" path="res://res/Sprite-0002.png" id="5_h2g73"]
-[ext_resource type="Texture2D" uid="uid://dgh0clon3qvjm" path="res://res/Sprite-00011.png" id="6_3ppv6"]
-[ext_resource type="Texture2D" uid="uid://bvk540622e1k3" path="res://res/Sprite-0006.png" id="6_e8w0d"]
-[ext_resource type="Texture2D" uid="uid://clqxd83fj01gd" path="res://res/Sprite-0003.png" id="7_2w3bl"]
-[ext_resource type="Texture2D" uid="uid://cvfnmwqf0r8ed" path="res://res/Sprite-0010.png" id="9_568n3"]
+[ext_resource type="Texture2D" uid="uid://m3pwqby0kkhu" path="res://res/player_knight.png" id="3_j82fq"]
+[ext_resource type="Texture2D" uid="uid://cn7drjkudnqot" path="res://res/Sprite-0005.png" id="4_e3f21"]
+[ext_resource type="Texture2D" uid="uid://cpqjfw1j2ju51" path="res://res/Sprite-0008.png" id="5_7bb0n"]
+[ext_resource type="Texture2D" uid="uid://we7i1g007x41" path="res://res/Sprite-0002.png" id="5_h2g73"]
+[ext_resource type="Texture2D" uid="uid://cue4vwd01dhh3" path="res://res/Sprite-00011.png" id="6_3ppv6"]
+[ext_resource type="Texture2D" uid="uid://bk6q7agephv02" path="res://res/Sprite-0006.png" id="6_e8w0d"]
+[ext_resource type="Texture2D" uid="uid://o7gp0f8mcclu" path="res://res/Sprite-0003.png" id="7_2w3bl"]
+[ext_resource type="Texture2D" uid="uid://c8w2kuurglmtk" path="res://res/Sprite-0010.png" id="9_568n3"]
 [ext_resource type="Script" path="res://scenes/part2/moving_platform.gd" id="10_gwu7e"]
-[ext_resource type="Texture2D" uid="uid://cgame5ynp4iq4" path="res://res/Sprite-00014.png" id="12_vheug"]
+[ext_resource type="Texture2D" uid="uid://dgd1k7bdx531l" path="res://res/Sprite-00014.png" id="12_vheug"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jujwu"]
 texture = ExtResource("5_7bb0n")
@@ -258,7 +258,7 @@ script = ExtResource("1_tjr7n")
 position = Vector2(600, 350)
 
 [node name="Player" parent="." instance=ExtResource("2_na7yo")]
-position = Vector2(9642, 881)
+position = Vector2(11521, 525)
 scale = Vector2(4.5, 4.5)
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
@@ -285,7 +285,7 @@ tile_set = SubResource("TileSet_60pl0")
 
 [node name="Checkpoints" type="TileMapLayer" parent="."]
 scale = Vector2(4.5, 4.5)
-tile_map_data = PackedByteArray("AABJAA8AAAABAAAAAACGAA0AAAABAAAAAADEAAEAAAABAAAAAAA=")
+tile_map_data = PackedByteArray("AABJAA8AAAABAAAAAACGAA0AAAABAAAAAADEAAEAAAABAAAAAAA0ABQAAAABAAAAAAA=")
 tile_set = SubResource("TileSet_r3swv")
 
 [node name="Portals" type="TileMapLayer" parent="."]

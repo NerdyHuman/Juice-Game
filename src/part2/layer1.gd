@@ -35,6 +35,8 @@ func movePlayerBack():
 var pressurePlateActivateListeners: Dictionary = {Vector2i(87, 18): showPlatform4, Vector2i(176, 7): showPlatform6, Vector2i(175, 16): movePlayerBack}
 var pressurePlateDeactivateListeners: Dictionary = {Vector2i(87, 18): hidePlatform4, Vector2i(176, 7): hidePlatform6}
 
+var canSwitchLayers = true
+
 func activate_pressure_plate(coords: Vector2i, pressurePlatesLayer: TileMapLayer) -> void:
 	pressurePlatesLayer.set_cell(coords, 0, Vector2i(1, 0))
 	
