@@ -2,21 +2,21 @@
 
 [ext_resource type="Script" path="res://src/part2/layer1.gd" id="1_kh8in"]
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="2_hd64o"]
-[ext_resource type="Texture2D" uid="uid://bhhuv1oaet3s4" path="res://res/player_princess.png" id="3_6hn3b"]
-[ext_resource type="Texture2D" uid="uid://datqb6kgrju16" path="res://res/Sprite-0005.png" id="4_chjvs"]
-[ext_resource type="Texture2D" uid="uid://c0ke1bevjxudp" path="res://res/Sprite-0008.png" id="5_55321"]
-[ext_resource type="Texture2D" uid="uid://ch6ol1khk4us" path="res://res/Sprite-0002.png" id="5_heojv"]
-[ext_resource type="Texture2D" uid="uid://clqxd83fj01gd" path="res://res/Sprite-0003.png" id="6_3hchj"]
-[ext_resource type="Texture2D" uid="uid://dgh0clon3qvjm" path="res://res/Sprite-00011.png" id="6_5ampt"]
-[ext_resource type="Texture2D" uid="uid://c2m3bjukgs83l" path="res://res/Sprite-0004.png" id="7_6p2iv"]
+[ext_resource type="Texture2D" uid="uid://t52k343cr1ne" path="res://res/player_princess.png" id="3_6hn3b"]
+[ext_resource type="Texture2D" uid="uid://cn7drjkudnqot" path="res://res/Sprite-0005.png" id="4_chjvs"]
+[ext_resource type="Texture2D" uid="uid://cpqjfw1j2ju51" path="res://res/Sprite-0008.png" id="5_55321"]
+[ext_resource type="Texture2D" uid="uid://we7i1g007x41" path="res://res/Sprite-0002.png" id="5_heojv"]
+[ext_resource type="Texture2D" uid="uid://o7gp0f8mcclu" path="res://res/Sprite-0003.png" id="6_3hchj"]
+[ext_resource type="Texture2D" uid="uid://cue4vwd01dhh3" path="res://res/Sprite-00011.png" id="6_5ampt"]
+[ext_resource type="Texture2D" uid="uid://cxdw1iphn5taf" path="res://res/Sprite-0004.png" id="7_6p2iv"]
 [ext_resource type="Script" path="res://scenes/part2/platform_5.gd" id="9_0x8wg"]
-[ext_resource type="Texture2D" uid="uid://cvfnmwqf0r8ed" path="res://res/Sprite-0010.png" id="9_3g2yh"]
+[ext_resource type="Texture2D" uid="uid://c8w2kuurglmtk" path="res://res/Sprite-0010.png" id="9_3g2yh"]
 [ext_resource type="Script" path="res://scenes/part2/moving_platform.gd" id="10_rontx"]
-[ext_resource type="Texture2D" uid="uid://c0xqp2i3l20uh" path="res://res/Sprite-00012.png" id="13_8jtp5"]
-[ext_resource type="Texture2D" uid="uid://cmdqyfbpfv6bx" path="res://res/Sprite-00013.png" id="14_iu4em"]
-[ext_resource type="Script" path="res://scenes/part2/key.gd" id="14_n4brc"]
-[ext_resource type="Script" path="res://scenes/part2/doors.gd" id="15_qqbi0"]
-[ext_resource type="Texture2D" uid="uid://cgame5ynp4iq4" path="res://res/Sprite-00014.png" id="17_xchom"]
+[ext_resource type="Texture2D" uid="uid://dohxoynohue21" path="res://res/Sprite-00012.png" id="13_8jtp5"]
+[ext_resource type="Script" path="res://src/part3/placeholder_key.gd" id="14_frjgd"]
+[ext_resource type="Texture2D" uid="uid://dntxwdalt8xfq" path="res://res/Sprite-00013.png" id="14_iu4em"]
+[ext_resource type="Script" path="res://src/doors.gd" id="17_jwla5"]
+[ext_resource type="Texture2D" uid="uid://dgd1k7bdx531l" path="res://res/Sprite-00014.png" id="17_xchom"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_itk3p"]
 texture = ExtResource("5_55321")
@@ -302,7 +302,7 @@ position = Vector2(600, 350)
 
 [node name="Player" parent="." instance=ExtResource("2_hd64o")]
 z_index = 1
-position = Vector2(6169, 1268)
+position = Vector2(11820, 593)
 scale = Vector2(4.5, 4.5)
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
@@ -410,7 +410,8 @@ shape = SubResource("WorldBoundaryShape2D_l1ypx")
 position = Vector2(11769, 1400)
 scale = Vector2(4.5, 4.5)
 physics_material_override = SubResource("PhysicsMaterial_4tw66")
-script = ExtResource("14_n4brc")
+script = ExtResource("14_frjgd")
+targetDoorCoords = Vector2i(168, 7)
 
 [node name="Sprite2D" type="Sprite2D" parent="Key"]
 position = Vector2(112, 6.675)
@@ -424,13 +425,12 @@ libraries = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Key"]
 shape = SubResource("RectangleShape2D_v64n0")
 
-[node name="Doors" type="TileMapLayer" parent="." node_paths=PackedStringArray("key")]
+[node name="Doors" type="TileMapLayer" parent="."]
 position = Vector2(-2, 1)
 scale = Vector2(4.5, 4.5)
 tile_map_data = PackedByteArray("AACoAAcAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_c8gpg")
-script = ExtResource("15_qqbi0")
-key = NodePath("../Key")
+script = ExtResource("17_jwla5")
 
 [connection signal="timeout" from="Platform5/ShowKillableTimer" to="Platform5" method="_on_show_killable_timer_timeout"]
 [connection signal="body_entered" from="Killzone" to="Player" method="killzone_callback"]

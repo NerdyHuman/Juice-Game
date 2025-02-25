@@ -14,6 +14,8 @@ func hidePlatform2():
 var pressurePlateActivateListeners: Dictionary = {Vector2i(95, 4): showPlatform2}
 var pressurePlateDeactivateListeners: Dictionary = {Vector2i(95, 4): hidePlatform2}
 
+var canSwitchLayers = true
+
 var platform1Visible = false
 
 var isGamePadConnected = false

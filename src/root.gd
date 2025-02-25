@@ -28,7 +28,7 @@ var currentScenePart = "part2"
 var isTransitioning = false
 
 # portal destinations, these are diff scenes.
-var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "end"}
+var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "part3", Vector2i(238, 16): "end"}
 
 func get_active_node() -> Node2D:
 	if activeLayer == 0:
@@ -180,7 +180,7 @@ func switchLayers():
 	var newLayer: Node = get_active_node()
 	newLayer.initialize()
 	
-	if playerSwitchRegens < 2 or oldLayer.get_node("Player").canDash:
+	if playerSwitchRegens < 1 or oldLayer.get_node("Player").canDash:
 		if not oldLayer.get_node("Player").canDash:
 			playerSwitchRegens += 1
 		newLayer.get_node("Player").canDash = true
@@ -232,9 +232,9 @@ func _input(event: InputEvent) -> void:
 	if currentScenePart == "end":
 		return
 	
-	if Input.is_action_just_pressed("switch-layer"):
+	if Input.is_action_just_pressed("switch-layer") and get_active_node().canSwitchLayers:
 		switchLayers()
-	elif Input.is_action_just_pressed("teleport-second-player"):
+	elif Input.is_action_just_pressed("teleport-second-player") and get_active_node().canSwitchLayers:
 		if activeLayer == 0:
 			get_node("Layer2/Player").set("position", get_node("Layer1/Player").get("position"))
 		elif activeLayer == 1:
