@@ -1,14 +1,14 @@
 extends CharacterBody2D
 
-const JUMP_VELOCITY = -300.0
+const JUMP_VELOCITY = -500.0
 
-@export var SPEED = 200.0
+@export var SPEED = 400.0
 @export var JUMP_QUEUE_GRACE_PERIOD = 0.1
 
 var isJumpQueued = false
 var timeSinceJumpQueued = 0
 
-var generator_count = 0
+var dashTween: Tween = null
 
 var coyote = false
 var coyoteLastFloor = false
@@ -96,15 +96,18 @@ func _physics_process(delta: float) -> void:
 			var query = PhysicsRayQueryParameters2D.create(origin, position + positionOffset)
 			var result = space_state.intersect_ray(query)
 			
-			var tween = get_tree().create_tween()
-			tween.set_trans(Tween.TRANS_QUART)
-			tween.set_ease(Tween.EASE_IN_OUT)
+			if dashTween != null and dashTween.is_running():
+				dashTween.kill()
+			
+			dashTween = get_tree().create_tween()
+			dashTween.set_trans(Tween.TRANS_QUART)
+			dashTween.set_ease(Tween.EASE_IN_OUT)
 			
 			#if get_child(1).get("flip_h"):
 			if result:
-				tween.tween_property(self, "position", result.position - Vector2(10 * sign(direction), 20 * sign(verticalDirection)), 0.2)
+				dashTween.tween_property(self, "position", result.position - Vector2(10 * sign(direction), 20 * sign(verticalDirection)), 0.2)
 			else:
-				tween.tween_property(self, "position", position + positionOffset, 0.2)
+				dashTween.tween_property(self, "position", position + positionOffset, 0.2)
 	
 	if direction > 0:
 		get_node("Sprite2D").set("flip_h", false)
@@ -112,6 +115,9 @@ func _physics_process(delta: float) -> void:
 		get_node("Sprite2D").set("flip_h", true)
 	
 	move_and_slide()
+	
+	$Background.position.x = clamp(60 - (position.x - 600) * 0.005, -60, 60)
+	$Background.position.y = clamp(0 - (position.y - 350) * 0.005, -60, 60)
 	
 	var isOnPressurePlateNow = false
 	var currentPressurePlate
@@ -122,6 +128,10 @@ func _physics_process(delta: float) -> void:
 	
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
+		
+		if collision == null:
+			continue
+		
 		var collider = collision.get_collider()
 		
 		if collider is TileMapLayer:
@@ -130,7 +140,7 @@ func _physics_process(delta: float) -> void:
 			var collisionPoint = collision.get_position()
 			var collisionPointInMap = collider.local_to_map(collider.to_local(collisionPoint))
 			
-			if tileMapLayer.name == "JumpPads":
+			if tileMapLayer.name == "JumpPads" and abs(collision.get_angle()) <= 1.58:
 				velocity.y = JUMP_VELOCITY * 1.5
 				enableDash()
 				isJumping = true
@@ -147,6 +157,9 @@ func _physics_process(delta: float) -> void:
 				if collider.get_cell_atlas_coords(collisionPointInMap) == Vector2i(0, 0):
 					get_parent().activate_pressure_plate(collisionPointInMap, collider)
 			if tileMapLayer.name == "Killables":
+				if dashTween != null and dashTween.is_running():
+					dashTween.kill()
+				
 				killPlayer()
 			if tileMapLayer.name == "Portals":
 				get_tree().root.get_node("Root").activate_portal(collisionPointInMap)
@@ -175,15 +188,21 @@ func _physics_process(delta: float) -> void:
 					#
 					#grabbedKey = null
 					tileMapLayer.openDoor(grabbedKey, collisionPointInMap)
-			if tileMapLayer.name == "Generators":
+			if tileMapLayer.name == "DashRegens":
 				# attempt to fix the missing cell
 				if collider.get_cell_tile_data(collisionPointInMap) == null:
 					for cell in collider.get_surrounding_cells(collisionPointInMap):
 						if collider.get_cell_tile_data(cell):
 							collisionPointInMap = cell
 				
-				generator_count += 1
+				$DashRegenSFX.play()
+				enableDash()
 				collider.set_cell(collisionPointInMap)
+				
+				var timer = get_tree().create_timer(2)
+				await timer.timeout
+				
+				collider.set_cell(collisionPointInMap, 0, Vector2i(0, 0))
 		elif collider is StaticBody2D:
 			var staticBody = collider as StaticBody2D
 			
@@ -220,8 +239,6 @@ func _physics_process(delta: float) -> void:
 	isOnPressurePlate = isOnPressurePlateNow
 	pressurePlateCoords = currentPressurePlate
 	pressurePlateLayer = currentPressurePlateLayer
-	
-	move_and_slide()
 	
 	if position.x < 500:
 		position.x = 500

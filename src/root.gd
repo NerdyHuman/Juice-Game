@@ -23,12 +23,12 @@ var playerSwitchRegens = 0
 #var layerOnePlatform2Visible: bool = false
 
 # The current part, this is inserted into the scene name like this: "[currentScenePart]/layerX.tscn"
-var currentScenePart = "part2"
+var currentScenePart = ""
 
 var isTransitioning = false
 
 # portal destinations, these are diff scenes.
-var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "part3", Vector2i(238, 16): "end"}
+var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "part3", Vector2i(356, 16): "end"}
 
 func get_active_node() -> Node2D:
 	if activeLayer == 0:
@@ -249,6 +249,10 @@ func _physics_process(delta: float) -> void:
 
 func _ready() -> void:
 	Util = UtilRes.new()
+
+func start_game() -> void:
+	currentScenePart = "part3"
+	
 	loadLayers()
 	
 	var playerCamera = Camera2D.new()

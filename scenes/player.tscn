@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://db1tvuq63ewte"]
+[gd_scene load_steps=8 format=3 uid="uid://db1tvuq63ewte"]
 
 [ext_resource type="Script" path="res://src/player.gd" id="1_1r80b"]
 [ext_resource type="AudioStream" uid="uid://dk0ecei4v4i34" path="res://res/DashSFX.wav" id="3_hocf0"]
+[ext_resource type="AudioStream" uid="uid://cp2pxpxoh5vuk" path="res://res/DashRegenSFX.wav" id="3_mrwnx"]
+[ext_resource type="Texture2D" uid="uid://b1y8tv8jdol23" path="res://res/Sprite-0018.png" id="3_wgw55"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rmvda"]
 radius = 5.43
@@ -28,6 +30,9 @@ shape = SubResource("CapsuleShape2D_rmvda")
 [node name="DashSFX" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_hocf0")
 
+[node name="DashRegenSFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_mrwnx")
+
 [node name="CoyoteTimer" type="Timer" parent="."]
 wait_time = 0.1
 one_shot = true
@@ -39,5 +44,11 @@ shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.470588)
 shadow_filter_smooth = 0.5
 texture = SubResource("GradientTexture2D_l6q1k")
+
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.359069, 0.359069, 0.359069, 1)
+z_index = -2
+position = Vector2(60, 0)
+texture = ExtResource("3_wgw55")
 
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
