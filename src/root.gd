@@ -7,6 +7,8 @@ var Util
 
 var activeLayer = 1
 
+var chips = 0
+
 # var loadCount = 0
 
 # The amount of times the player had regenerated their Dash ability through switching layers.
@@ -28,7 +30,7 @@ var currentScenePart = ""
 var isTransitioning = false
 
 # portal destinations, these are diff scenes.
-var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "part3", Vector2i(356, 16): "end"}
+var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "part3", Vector2i(356, 16): "part4", Vector2i(254, 7): "end"}
 
 func get_active_node() -> Node2D:
 	if activeLayer == 0:
@@ -72,13 +74,18 @@ func activate_portal(coords: Vector2i) -> void:
 		
 		var player = get_active_node().get_node("Player")
 		
-		# the last 2 lines dont work for some reason
-		player.isActive = false
-		player.get_node("PointLight2D").set("enabled", false)
-		player.get_node("PointLight2D").set("shadow_enabled", false)
-		
 		var playerCamera = Camera2D.new()
 		playerCamera.name = "Camera"
+		
+		var playerHUD = load("res://scenes/player_hud.tscn") as PackedScene
+		var playerHUDNode = playerHUD.instantiate()
+		
+		playerHUDNode.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
+		
+		# gross hack to make sure the loading screen is diplayed in full no matter the players scale
+		playerHUDNode.set("position", -((Vector2(0.5, 0.5) / player.get("scale")) * Vector2(1152, 648)))
+		
+		playerCamera.add_child(playerHUDNode)
 		
 		loadingScreenNode.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
 		
@@ -90,6 +97,13 @@ func activate_portal(coords: Vector2i) -> void:
 		player.add_child(playerCamera)
 		
 		switchLayers()
+		
+		player = get_active_node().get_node("Player")
+		
+		# the last 2 lines dont work for some reason
+		player.isActive = false
+		player.get_node("PointLight2D").set("enabled", false)
+		player.get_node("PointLight2D").set("shadow_enabled", false)
 		
 		# serve that beautiful loading screen for a while, the reason its defined in the back is because..
 		# in case the loading process actually does take a while for some reason, we shouldn't delay..
@@ -251,13 +265,24 @@ func _ready() -> void:
 	Util = UtilRes.new()
 
 func start_game() -> void:
-	currentScenePart = "part3"
+	currentScenePart = "part4"
 	
 	loadLayers()
 	
 	var playerCamera = Camera2D.new()
 	playerCamera.name = "Camera"
 	
-	get_active_node().get_node("Player").add_child(playerCamera)
+	var player = get_active_node().get_node("Player")
+	
+	var playerHUD = load("res://scenes/player_hud.tscn") as PackedScene
+	var playerHUDNode = playerHUD.instantiate()
+	
+	playerHUDNode.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
+	
+	# gross hack to make sure the loading screen is diplayed in full no matter the players scale
+	playerHUDNode.set("position", -((Vector2(0.5, 0.5) / player.get("scale")) * Vector2(1152, 648)))
+	
+	playerCamera.add_child(playerHUDNode)
+	player.add_child(playerCamera)
 	
 	switchLayers()

@@ -59,16 +59,27 @@ sources/0 = SubResource("TileSetAtlasSource_keuwb")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vb3lj"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ng17r"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1t1ek"]
 texture = ExtResource("6_rn8gr")
 0:0/size_in_atlas = Vector2i(2, 1)
+0:0/animation_frame_0/duration = 0.2
+0:0/animation_frame_1/duration = 0.2
+0:0/animation_frame_2/duration = 0.2
+0:0/animation_frame_3/duration = 0.2
+0:0/animation_frame_4/duration = 0.2
+0:0/animation_frame_5/duration = 0.2
+0:0/animation_frame_6/duration = 0.2
+0:0/animation_frame_7/duration = 0.2
 0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(10, -2, 10, 3, -11, 3, -11, -2)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(11, -4, 11, 5, -10, 5, -10, -4)
+16:0/size_in_atlas = Vector2i(2, 1)
+16:0/0 = 0
+16:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, 5, 11, 5, 11, 8, -10, 8)
 
-[sub_resource type="TileSet" id="TileSet_n0hgv"]
+[sub_resource type="TileSet" id="TileSet_svymg"]
 physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_vb3lj")
-sources/0 = SubResource("TileSetAtlasSource_ng17r")
+sources/0 = SubResource("TileSetAtlasSource_1t1ek")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ajm7c"]
 light_mode = 1
@@ -134,7 +145,8 @@ texture = ExtResource("5_1otar")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_r3swv"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 2
+physics_layer_0/collision_mask = 2
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_e1mhf")
 sources/0 = SubResource("TileSetAtlasSource_a2cbb")
 
@@ -220,16 +232,27 @@ terrain_set_0/terrain_0/color = Color(5.29438e-07, 0.465642, 0.187337, 1)
 sources/0 = SubResource("TileSetAtlasSource_su2q7")
 sources/1 = SubResource("TileSetAtlasSource_se77l")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7cskb"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p0uy5"]
 texture = ExtResource("6_rn8gr")
 0:0/size_in_atlas = Vector2i(2, 1)
+0:0/animation_frame_0/duration = 0.2
+0:0/animation_frame_1/duration = 0.2
+0:0/animation_frame_2/duration = 0.2
+0:0/animation_frame_3/duration = 0.2
+0:0/animation_frame_4/duration = 0.2
+0:0/animation_frame_5/duration = 0.2
+0:0/animation_frame_6/duration = 0.2
+0:0/animation_frame_7/duration = 0.2
 0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(10, -2, 10, 3, -11, 3, -11, -2)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(11, -4, 11, 5, -10, 5, -10, -4)
+16:0/size_in_atlas = Vector2i(2, 1)
+16:0/0 = 0
+16:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, 5, 11, 5, 11, 8, -10, 8)
 
-[sub_resource type="TileSet" id="TileSet_uulo5"]
+[sub_resource type="TileSet" id="TileSet_gr8c1"]
 physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_vb3lj")
-sources/0 = SubResource("TileSetAtlasSource_7cskb")
+sources/0 = SubResource("TileSetAtlasSource_p0uy5")
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_m4kdj"]
 distance = -1024.0
@@ -268,7 +291,7 @@ tile_set = SubResource("TileSet_7n2p5")
 [node name="JumpPads" type="TileMapLayer" parent="."]
 scale = Vector2(4.5, 4.5)
 tile_map_data = PackedByteArray("AACiAAMAAAAAAAAAAACpAAEAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_n0hgv")
+tile_set = SubResource("TileSet_svymg")
 
 [node name="Terrain" type="TileMapLayer" parent="."]
 material = SubResource("CanvasItemMaterial_ajm7c")
@@ -311,7 +334,7 @@ tile_set = SubResource("TileSet_r3swv")
 
 [node name="JumpPads" type="TileMapLayer" parent="Platform1"]
 tile_map_data = PackedByteArray("AABbAAYAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_uulo5")
+tile_set = SubResource("TileSet_gr8c1")
 
 [node name="Killzone" type="Area2D" parent="."]
 

@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://bai7eybw6o528"]
+
+[ext_resource type="Texture2D" uid="uid://b183hjjhwlynu" path="res://res/Sprite-0019/Sprite-0019-static.png" id="1_lgat3"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4jdev"]
+light_mode = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_2rvwe"]
+font_size = 52
+
+[node name="PlayerHUD" type="Control"]
+light_mask = 0
+z_index = 2
+material = SubResource("CanvasItemMaterial_4jdev")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+offset_right = 648.0
+offset_bottom = 648.0
+
+[node name="HBox" type="HBoxContainer" parent="VBox"]
+use_parent_material = true
+layout_mode = 2
+
+[node name="ChipsIcon" type="TextureRect" parent="VBox/HBox"]
+texture_filter = 1
+use_parent_material = true
+layout_mode = 2
+texture = ExtResource("1_lgat3")
+expand_mode = 2
+
+[node name="ChipsCounter" type="Label" parent="VBox/HBox"]
+use_parent_material = true
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_2rvwe")
