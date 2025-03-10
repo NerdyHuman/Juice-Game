@@ -1,12 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://bai7eybw6o528"]
+[gd_scene load_steps=7 format=3 uid="uid://bai7eybw6o528"]
 
 [ext_resource type="Texture2D" uid="uid://b183hjjhwlynu" path="res://res/Sprite-0019/Sprite-0019-static.png" id="1_lgat3"]
+[ext_resource type="Texture2D" uid="uid://cso10wvhc3joq" path="res://res/Sprite-0024.png" id="2_er5qu"]
+[ext_resource type="Script" uid="uid://cj8rfo0l1ufdo" path="res://src/death_rect.gd" id="3_or0tx"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4jdev"]
 light_mode = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_2rvwe"]
 font_size = 52
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qcjqi"]
+atlas = ExtResource("2_er5qu")
+region = Rect2(0, 0, 1000, 0)
 
 [node name="PlayerHUD" type="Control"]
 light_mask = 0
@@ -41,3 +47,11 @@ use_parent_material = true
 layout_mode = 2
 text = "0"
 label_settings = SubResource("LabelSettings_2rvwe")
+
+[node name="DeathScreen" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = SubResource("AtlasTexture_qcjqi")
+script = ExtResource("3_or0tx")

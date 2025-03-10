@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://bwdqp310dgnpt"]
 
-[ext_resource type="Script" path="res://src/root.gd" id="1_q774y"]
-[ext_resource type="PackedScene" uid="uid://cyd4i3q1jwlm1" path="res://scenes/intro/intro.tscn" id="2_60qm4"]
+[ext_resource type="Script" uid="uid://n7damat3fs3o" path="res://src/root.gd" id="1_q774y"]
+[ext_resource type="PackedScene" uid="uid://5hardo70k2xg" path="res://scenes/start_screen.tscn" id="2_m7djw"]
 
 [node name="Root" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_q774y")
 
-[node name="Intro" parent="." instance=ExtResource("2_60qm4")]
+[node name="StartScreen" parent="." instance=ExtResource("2_m7djw")]

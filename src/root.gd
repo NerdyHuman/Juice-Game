@@ -30,7 +30,7 @@ var currentScenePart = ""
 var isTransitioning = false
 
 # portal destinations, these are diff scenes.
-var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "part3", Vector2i(356, 16): "part4", Vector2i(254, 7): "end"}
+var portalDestinations: Dictionary = {Vector2i(178, 15): "part2", Vector2i(238, 1): "part3", Vector2i(356, 16): "part4", Vector2i(254, 7): "part5", Vector2i(225, 11): "part6", Vector2i(315, 15): "end"}
 
 func get_active_node() -> Node2D:
 	if activeLayer == 0:
@@ -74,18 +74,15 @@ func activate_portal(coords: Vector2i) -> void:
 		
 		var player = get_active_node().get_node("Player")
 		
-		var playerCamera = Camera2D.new()
-		playerCamera.name = "Camera"
+		var playerCameraScene = load("res://scenes/camera.tscn") as PackedScene
+		var playerCamera = playerCameraScene.instantiate()
 		
-		var playerHUD = load("res://scenes/player_hud.tscn") as PackedScene
-		var playerHUDNode = playerHUD.instantiate()
+		var playerHUD = playerCamera.get_node("PlayerHUD")
 		
-		playerHUDNode.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
+		playerHUD.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
 		
 		# gross hack to make sure the loading screen is diplayed in full no matter the players scale
-		playerHUDNode.set("position", -((Vector2(0.5, 0.5) / player.get("scale")) * Vector2(1152, 648)))
-		
-		playerCamera.add_child(playerHUDNode)
+		playerHUD.set("position", -((Vector2(0.5, 0.5) / player.get("scale")) * Vector2(1152, 648)))
 		
 		loadingScreenNode.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
 		
@@ -194,10 +191,10 @@ func switchLayers():
 	var newLayer: Node = get_active_node()
 	newLayer.initialize()
 	
-	if playerSwitchRegens < 1 or oldLayer.get_node("Player").canDash:
-		if not oldLayer.get_node("Player").canDash:
+	if playerSwitchRegens < 1 or oldLayer.get_node("Player").dashesAvailable > 0:
+		if oldLayer.get_node("Player").dashesAvailable <= 0:
 			playerSwitchRegens += 1
-		newLayer.get_node("Player").canDash = true
+		newLayer.get_node("Player").dashesAvailable = 1
 	
 	newLayer.set("modulate:a", 0)
 	
@@ -208,9 +205,12 @@ func switchLayers():
 		# can it be disabled?
 		if child.get("disabled") != null:
 			child.set("disabled", false)
-			
+		
 		if child.get("enabled") != null:
 			child.set("enabled", true)
+		
+		if child is LightOccluder2D:
+			child.set("visible", true)
 	
 	var tween = get_tree().create_tween()
 	tween.set_parallel(true)
@@ -223,12 +223,15 @@ func switchLayers():
 	await tween.finished
 	
 	for child in Util.get_children_recursive(oldLayer):
-		# can it be disabled?
+		# can it be enabled?
 		if child.get("disabled") != null:
 			child.set("disabled", true)
-			
+		
 		if child.get("enabled") != null:
 			child.set("enabled", false)
+		
+		if child is LightOccluder2D:
+			child.set("visible", false)
 	
 	oldLayer.get_node("Player").isActive = false
 	newLayer.get_node("Player").isActive = true
@@ -242,8 +245,8 @@ func switchLayers():
 	
 	isTransitioning = false
 
-func _input(event: InputEvent) -> void:
-	if currentScenePart == "end":
+func _input(_event: InputEvent) -> void:
+	if currentScenePart == "end" or currentScenePart == "":
 		return
 	
 	if Input.is_action_just_pressed("switch-layer") and get_active_node().canSwitchLayers:
@@ -256,7 +259,7 @@ func _input(event: InputEvent) -> void:
 		
 		switchLayers()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if currentScenePart == "part1":
 		get_node("Layer1").update_glyphs()
 		get_node("Layer2").update_glyphs()
@@ -264,25 +267,29 @@ func _physics_process(delta: float) -> void:
 func _ready() -> void:
 	Util = UtilRes.new()
 
+func start_intro() -> void:
+	var intro = load("res://scenes/intro/intro.tscn") as PackedScene
+	
+	var introNode = intro.instantiate()
+	add_child(introNode)
+
 func start_game() -> void:
-	currentScenePart = "part4"
+	currentScenePart = "part6"
 	
 	loadLayers()
 	
-	var playerCamera = Camera2D.new()
-	playerCamera.name = "Camera"
+	var playerCameraScene = load("res://scenes/camera.tscn") as PackedScene
+	var playerCamera = playerCameraScene.instantiate()
 	
 	var player = get_active_node().get_node("Player")
 	
-	var playerHUD = load("res://scenes/player_hud.tscn") as PackedScene
-	var playerHUDNode = playerHUD.instantiate()
+	var playerHUD = playerCamera.get_node("PlayerHUD")
 	
-	playerHUDNode.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
+	playerHUD.set("scale", Vector2(1.0, 1.0) / player.get("scale"))
 	
 	# gross hack to make sure the loading screen is diplayed in full no matter the players scale
-	playerHUDNode.set("position", -((Vector2(0.5, 0.5) / player.get("scale")) * Vector2(1152, 648)))
+	playerHUD.set("position", -((Vector2(0.5, 0.5) / player.get("scale")) * Vector2(1152, 648)))
 	
-	playerCamera.add_child(playerHUDNode)
 	player.add_child(playerCamera)
 	
 	switchLayers()

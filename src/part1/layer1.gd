@@ -5,10 +5,14 @@ var Util = UtilRes.new()
 
 func showPlatform1():
 	get_parent().get_node("Layer2").platform1Visible = true
+	$TutorialDirections.set_cell(Vector2i(85, 4), 0, Vector2i(0, 3))
+	isGamePadConnected = false
+	update_glyphs()
 	# layerTwoPlatform1Visible = true
 	
 func hidePlatform1():
 	get_parent().get_node("Layer2").platform1Visible = false
+	$TutorialDirections.set_cell(Vector2i(85, 4))
 	# layerTwoPlatform1Visible = false
 
 var pressurePlateActivateListeners: Dictionary = {Vector2i(84, 5): showPlatform1}
@@ -35,8 +39,6 @@ func deactivate_pressure_plate(coords: Vector2i, pressurePlatesLayer: TileMapLay
 		pressurePlateDeactivateListeners.get(coords).call()
 
 func respawnPlayer() -> void:
-	var children = name
-	
 	get_node("Player").set("position", get_node("SpawnPoint").get("position"))
 
 func update_glyphs() -> void:

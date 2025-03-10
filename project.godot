@@ -21,6 +21,7 @@ Icon="*res://src/part1/layer1.gd"
 
 [display]
 
+window/size/mode=4
 window/stretch/mode="viewport"
 
 [input]

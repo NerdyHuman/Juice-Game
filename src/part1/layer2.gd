@@ -5,10 +5,14 @@ var Util = UtilRes.new()
 
 func showPlatform2():
 	get_parent().get_node("Layer1").platform2Visible = true
+	$TutorialDirections.set_cell(Vector2i(96, 3), 0, Vector2i(0, 4))
+	isGamePadConnected = false
+	update_glyphs()
 	# layerTwoPlatform1Visible = true
 	
 func hidePlatform2():
 	get_parent().get_node("Layer1").platform2Visible = false
+	$TutorialDirections.set_cell(Vector2i(96, 3))
 	# layerTwoPlatform1Visible = false
 
 var pressurePlateActivateListeners: Dictionary = {Vector2i(95, 4): showPlatform2}

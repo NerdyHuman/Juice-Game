@@ -1,0 +1,89 @@
+[gd_scene load_steps=12 format=3 uid="uid://5hardo70k2xg"]
+
+[ext_resource type="Script" uid="uid://dqwn8ikl4lti6" path="res://scenes/start_screen.gd" id="1_o7i0r"]
+[ext_resource type="Texture2D" uid="uid://75enb655lott" path="res://res/Sprite-0021.png" id="1_tx5wa"]
+[ext_resource type="Texture2D" uid="uid://bjwfteu5kop5e" path="res://res/Sprite-0023.png" id="2_r2jwc"]
+[ext_resource type="Texture2D" uid="uid://dcsj8q3jbqsdk" path="res://res/Sprite-0022.png" id="3_he1sj"]
+[ext_resource type="Script" uid="uid://c4dxxaokx4wjt" path="res://scenes/texture_rect.gd" id="3_hm208"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4jdev"]
+light_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hm208"]
+atlas = ExtResource("2_r2jwc")
+region = Rect2(0, 0, 341, 0)
+
+[sub_resource type="SystemFont" id="SystemFont_he1sj"]
+font_names = PackedStringArray("Jost")
+font_weight = 750
+subpixel_positioning = 0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hm208"]
+texture = ExtResource("3_he1sj")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r2jwc"]
+texture = ExtResource("3_he1sj")
+modulate_color = Color(0.783523, 0.783523, 0.783523, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_he1sj"]
+texture = ExtResource("3_he1sj")
+modulate_color = Color(0.903598, 0.903598, 0.903598, 1)
+
+[node name="StartScreen" type="Control"]
+light_mask = 0
+z_index = 2
+material = SubResource("CanvasItemMaterial_4jdev")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o7i0r")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = SubResource("AtlasTexture_hm208")
+script = ExtResource("3_hm208")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+use_parent_material = true
+layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 678.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="VBox/CenterContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(678.2, 0)
+layout_mode = 2
+texture = ExtResource("1_tx5wa")
+expand_mode = 4
+stretch_mode = 4
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="CenterContainer" type="CenterContainer" parent="HBox"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBox/CenterContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(219, 107.5)
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_he1sj")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/hover = SubResource("StyleBoxTexture_hm208")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_r2jwc")
+theme_override_styles/normal = SubResource("StyleBoxTexture_he1sj")
+text = "   Play"
+alignment = 0
+
+[connection signal="button_up" from="HBox/CenterContainer/Button" to="." method="_on_button_button_up"]

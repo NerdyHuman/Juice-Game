@@ -1,6 +1,10 @@
 extends TileMapLayer
 
 var isActive: bool = false
+var awaitingDeactivate: bool = false
+var awaitingDeactivateTime: int = 0
+
+var time_elapsed: float
 
 var tween: Tween = null
 
@@ -11,6 +15,10 @@ var distance: int
 var durationPerDistance: int
 
 func activate() -> void:
+	if awaitingDeactivate:
+		awaitingDeactivate = false
+		return
+	
 	if isActive:
 		return
 	
@@ -44,20 +52,25 @@ func deactivate() -> void:
 	if not isActive:
 		return
 	
-	if tween != null:
-		tween.kill()
-		tween = null
-	
-	tween = get_tree().create_tween()
-	tween.tween_property(get_parent(), "progress_ratio", 0, durationPerDistance * get_parent().get("progress_ratio"))
-	
-	isActive = false
+	awaitingDeactivateTime = time_elapsed
+	awaitingDeactivate = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta: float) -> void:
+func _process(delta: float) -> void:
+	time_elapsed += delta
+	
+	if awaitingDeactivate and awaitingDeactivateTime + 2 <= time_elapsed:
+		if tween != null:
+			tween.kill()
+			tween = null
+		
+		tween = get_tree().create_tween()
+		tween.tween_property(get_parent(), "progress_ratio", 0, durationPerDistance * get_parent().get("progress_ratio"))
+		
+		isActive = false
 	#if isActive:
 		#position.x += 50 * delta

@@ -10,6 +10,8 @@ var timeSinceJumpQueued = 0
 
 var dashTween: Tween = null
 
+var dashesAvailable: int = 1
+
 var crouching: bool = false
 
 var coyote = false
@@ -27,21 +29,27 @@ var Util = UtilRes.new()
 var lastMovingPlatform
 var lastMovingPlatformCell
 
-var canDash = false
 var isActive = false
 
 var grabbedKey: StaticBody2D = null
 
 func killPlayer() -> void:
 	print("Died!")
+	
+	isActive = false
+	$Camera/PlayerHUD/DeathScreen.start()
+	var timer = get_tree().create_timer(0.6)
+	await timer.timeout
+	
 	get_tree().root.get_node("Root").respawnPlayer()
+	isActive = true
 
 func killzone_callback(body: Node2D) -> void:
 	if body == self:
 		killPlayer()
 
 func enableDash() -> void:
-	canDash = true
+	dashesAvailable += 1
 	get_tree().root.get_node("Root").reset_switch_regen_count()
 
 func _physics_process(delta: float) -> void:
@@ -52,7 +60,9 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	else:
-		enableDash()
+		if dashesAvailable != 1:
+			dashesAvailable = 0
+			enableDash()
 		isJumping = false
 	
 	if not is_on_floor() and coyoteLastFloor and not isJumping:
@@ -61,7 +71,7 @@ func _physics_process(delta: float) -> void:
 	
 	coyoteLastFloor = is_on_floor()
 	
-	if Input.is_action_just_pressed("crouch") and is_on_floor() and not crouching:
+	if Input.is_action_pressed("crouch") and is_on_floor() and not crouching:
 		crouching = true
 		$Sprite2D.scale.y /= 2
 		$CollisionShape2D.scale.y /= 2
@@ -70,6 +80,7 @@ func _physics_process(delta: float) -> void:
 		crouching = false
 		$Sprite2D.scale.y *= 2
 		$CollisionShape2D.scale.y *= 2
+		position.y -= 25
 	
 	# Handle jump.
 	if Input.is_action_just_pressed("jump"):
@@ -93,15 +104,17 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
 	# Handle Dash
-	if Input.is_action_just_pressed("dash") and canDash:
+	if Input.is_action_just_pressed("dash") and dashesAvailable > 0:
 		var verticalDirection := Input.get_axis("look-up", "look-down")
 		
 		# Origin of the raycast, offset by 5 to prevent intentional glitching
 		var origin = (position + Vector2(5 * sign(direction), 5 * sign(verticalDirection)))
-		var positionOffset = Vector2(200 * sign(direction), 200 * sign(verticalDirection))
+		var positionOffset = Vector2(1 * sign(direction), 1 * sign(verticalDirection))
 		
 		if positionOffset != Vector2(0, 0):
-			canDash = false
+			positionOffset = positionOffset.normalized() * 250
+			
+			dashesAvailable -= 1
 			
 			get_node("DashSFX").play()
 		
@@ -131,6 +144,11 @@ func _physics_process(delta: float) -> void:
 		get_node("Sprite2D").set("flip_h", false)
 	elif direction < 0:
 		get_node("Sprite2D").set("flip_h", true)
+	
+	if velocity != Vector2(0, 0) and is_on_floor():
+		$WalkingParticles.emitting = true
+	else:
+		$WalkingParticles.emitting = false
 	
 	move_and_slide()
 	
@@ -240,8 +258,8 @@ func _physics_process(delta: float) -> void:
 	pressurePlateCoords = currentPressurePlate
 	pressurePlateLayer = currentPressurePlateLayer
 	
-	if position.x < 500:
-		position.x = 500
+	if position.x < 300:
+		position.x = 300
 
 func _on_coyote_timer_timeout() -> void:
 	coyote = false
@@ -294,17 +312,17 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		
 		var collisionPoint = tileMapLayer.to_global(tileMapLayer.map_to_local(collisionPointInMap))
 		
-		if tileMapLayer.name == "DashRegens" and not canDash:
+		if tileMapLayer.name == "DashRegens":
 			$DashRegenSFX.play()
+			
 			enableDash()
+			
 			tileMapLayer.set_cell(collisionPointInMap)
 			
 			var timer = get_tree().create_timer(2)
 			await timer.timeout
 			
 			tileMapLayer.set_cell(collisionPointInMap, 0, Vector2i(0, 0))
-		elif tileMapLayer.name == "DashRegens":
-			print("Rejected because you can already dash!")
 		
 		if tileMapLayer.name == "Checkpoints":
 			if tileMapLayer.get_cell_atlas_coords(collisionPointInMap) == Vector2i(1, 0):
@@ -316,12 +334,15 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			get_tree().root.get_node("Root").chips += 1
 			
 			get_node("Camera/PlayerHUD/VBox/HBox/ChipsCounter").text = str(get_tree().root.get_node("Root").chips)
+		
+		if tileMapLayer.name == "SpecialThings":
+			get_parent().invokeSpecialThing(collisionPointInMap)
 	elif body is StaticBody2D:
 		var staticBody = body as StaticBody2D
 		
-		if staticBody.name == "Key":
+		if staticBody.name.begins_with("Key"):
 			# disable its collision
-			staticBody.get_node("CollisionShape2D").disabled = true
+			staticBody.get_node("CollisionShape2D").set_deferred("disabled", true)
 			staticBody.picked_up_by = self
 			
 			grabbedKey = staticBody
