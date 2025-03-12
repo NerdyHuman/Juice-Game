@@ -17,6 +17,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if $Sprite2D/AnimationPlayer.is_playing():
+		return
+	
 	if picked_up_by != null:
 		origin = picked_up_by.get("position") - Vector2(80, 80)
 	

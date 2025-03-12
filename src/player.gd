@@ -221,6 +221,7 @@ func _physics_process(delta: float) -> void:
 					#tileMapLayer.set_cell(collisionPointInMap)
 					#
 					#grabbedKey = null
+					grabbedKey.picked_up_by = null
 					tileMapLayer.openDoor(grabbedKey, collisionPointInMap)
 		if collider is PhysicsBody2D:
 			var body = collider as PhysicsBody2D

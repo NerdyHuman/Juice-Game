@@ -274,7 +274,7 @@ func start_intro() -> void:
 	add_child(introNode)
 
 func start_game() -> void:
-	currentScenePart = "part6"
+	currentScenePart = "part1"
 	
 	loadLayers()
 	
