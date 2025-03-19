@@ -1,22 +1,22 @@
-[gd_scene load_steps=61 format=4 uid="uid://c36k8h1gk20c1"]
+[gd_scene load_steps=59 format=4 uid="uid://c36k8h1gk20c1"]
 
-[ext_resource type="Script" uid="uid://bcuk6hbfx6yra" path="res://src/part2/layer1.gd" id="1_kh8in"]
+[ext_resource type="Script" path="res://src/part2/layer1.gd" id="1_kh8in"]
 [ext_resource type="PackedScene" uid="uid://db1tvuq63ewte" path="res://scenes/player.tscn" id="2_hd64o"]
-[ext_resource type="Texture2D" uid="uid://jwh7lubgaxig" path="res://res/Player1.png" id="3_gq7o8"]
-[ext_resource type="Texture2D" uid="uid://dgbjxm50aod72" path="res://res/Sprite-0015.png" id="5_5pc3l"]
-[ext_resource type="Texture2D" uid="uid://c0ke1bevjxudp" path="res://res/Sprite-0008.png" id="5_55321"]
-[ext_resource type="Texture2D" uid="uid://ch6ol1khk4us" path="res://res/Sprite-0002.png" id="5_heojv"]
-[ext_resource type="Texture2D" uid="uid://clqxd83fj01gd" path="res://res/Sprite-0003.png" id="6_3hchj"]
-[ext_resource type="Texture2D" uid="uid://dgh0clon3qvjm" path="res://res/Sprite-00011.png" id="6_5ampt"]
-[ext_resource type="Texture2D" uid="uid://c2m3bjukgs83l" path="res://res/Sprite-0004.png" id="7_6p2iv"]
-[ext_resource type="Script" uid="uid://42j7bp635w6c" path="res://scenes/part2/platform_5.gd" id="9_0x8wg"]
-[ext_resource type="Texture2D" uid="uid://cvfnmwqf0r8ed" path="res://res/Sprite-0010.png" id="9_3g2yh"]
-[ext_resource type="Script" uid="uid://m2oubs8ugfqc" path="res://scenes/part2/moving_platform.gd" id="10_rontx"]
-[ext_resource type="Texture2D" uid="uid://c0xqp2i3l20uh" path="res://res/Sprite-00012.png" id="13_8jtp5"]
-[ext_resource type="Script" uid="uid://cw2jkt43pogfu" path="res://src/part3/placeholder_key.gd" id="14_frjgd"]
-[ext_resource type="Texture2D" uid="uid://cmdqyfbpfv6bx" path="res://res/Sprite-00013.png" id="14_iu4em"]
-[ext_resource type="Script" uid="uid://cq8olv2et15xq" path="res://src/doors.gd" id="17_jwla5"]
-[ext_resource type="Texture2D" uid="uid://d4alylw0p3wnc" path="res://res/Sprite-0019/Sprite-0019.png" id="17_uyq53"]
+[ext_resource type="Texture2D" uid="uid://buupqcjkwsnv" path="res://res/Player1.png" id="3_gq7o8"]
+[ext_resource type="Texture2D" uid="uid://d215li4jdrlns" path="res://res/Sprite-0015.png" id="5_5pc3l"]
+[ext_resource type="Texture2D" uid="uid://b214n2ew1caac" path="res://res/Sprite-0008.png" id="5_55321"]
+[ext_resource type="Texture2D" uid="uid://ctq3sqrxpqdci" path="res://res/Sprite-0002.png" id="5_heojv"]
+[ext_resource type="Texture2D" uid="uid://dkv6g46hc2ty6" path="res://res/Sprite-0003.png" id="6_3hchj"]
+[ext_resource type="Texture2D" uid="uid://con8vr0wgqko8" path="res://res/Sprite-00011.png" id="6_5ampt"]
+[ext_resource type="Texture2D" uid="uid://71f8pjocintc" path="res://res/Sprite-0004.png" id="7_6p2iv"]
+[ext_resource type="Script" path="res://scenes/part2/platform_5.gd" id="9_0x8wg"]
+[ext_resource type="Texture2D" uid="uid://ddk48kt4bgonx" path="res://res/Sprite-0010.png" id="9_3g2yh"]
+[ext_resource type="Script" path="res://scenes/part2/moving_platform.gd" id="10_rontx"]
+[ext_resource type="Texture2D" uid="uid://t6toabs0kkx" path="res://res/Sprite-00012.png" id="13_8jtp5"]
+[ext_resource type="Script" path="res://src/part3/placeholder_key.gd" id="14_frjgd"]
+[ext_resource type="Texture2D" uid="uid://bto2tlebcxfky" path="res://res/Sprite-00013.png" id="14_iu4em"]
+[ext_resource type="Script" path="res://src/doors.gd" id="17_jwla5"]
+[ext_resource type="Texture2D" uid="uid://crdtcl858y0y2" path="res://res/Sprite-0019/Sprite-0019.png" id="17_uyq53"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vb3lj"]
 
@@ -47,18 +47,11 @@ light_mode = 1
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0onf6"]
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_u8nvc"]
-polygon = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
-
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ww0ve"]
-polygon = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7hx5e"]
 texture = ExtResource("5_55321")
 0:0/0 = 0
 0:0/0/terrain_set = 0
 0:0/0/terrain = 0
-0:0/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_u8nvc")
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 0:0/0/terrains_peering_bit/right_side = 0
 0:0/0/terrains_peering_bit/bottom_side = 0
@@ -67,7 +60,6 @@ texture = ExtResource("5_55321")
 1:0/0 = 0
 1:0/0/terrain_set = 0
 1:0/0/terrain = 0
-1:0/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_ww0ve")
 1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8, -8, -8)
 1:0/0/terrains_peering_bit/right_side = 0
 1:0/0/terrains_peering_bit/bottom_side = 0
@@ -285,8 +277,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0s5t1"]
 _data = {
-&"RESET": SubResource("Animation_wnji2"),
-&"key_open": SubResource("Animation_llvoh")
+"RESET": SubResource("Animation_wnji2"),
+"key_open": SubResource("Animation_llvoh")
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v64n0"]
@@ -460,7 +452,7 @@ texture = ExtResource("13_8jtp5")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Key/Sprite2D"]
 libraries = {
-&"": SubResource("AnimationLibrary_0s5t1")
+"": SubResource("AnimationLibrary_0s5t1")
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Key"]
