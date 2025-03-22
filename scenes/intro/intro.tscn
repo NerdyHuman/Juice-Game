@@ -1,11 +1,11 @@
 [gd_scene load_steps=14 format=4 uid="uid://cyd4i3q1jwlm1"]
 
-[ext_resource type="Texture2D" uid="uid://b214n2ew1caac" path="res://res/Sprite-0008.png" id="1_m3ojd"]
-[ext_resource type="Script" path="res://scenes/intro/intro.gd" id="1_p1wq2"]
-[ext_resource type="Texture2D" uid="uid://n0adduxgft2i" path="res://res/Player2.png" id="2_0qhee"]
-[ext_resource type="Texture2D" uid="uid://cm7jesi5pjcy0" path="res://res/Sprite-0016.png" id="2_v3xkq"]
-[ext_resource type="Texture2D" uid="uid://buupqcjkwsnv" path="res://res/Player1.png" id="3_fxihx"]
-[ext_resource type="Texture2D" uid="uid://c8n3wc23wtmqv" path="res://res/Sprite-0017.png" id="3_kqsr8"]
+[ext_resource type="Texture2D" uid="uid://c0ke1bevjxudp" path="res://res/Sprite-0008.png" id="1_m3ojd"]
+[ext_resource type="Script" uid="uid://b2xxb0s2iv61k" path="res://scenes/intro/intro.gd" id="1_p1wq2"]
+[ext_resource type="Texture2D" uid="uid://cbive3exa6lqp" path="res://res/Player2.png" id="2_0qhee"]
+[ext_resource type="Texture2D" uid="uid://cquo4othqsw5e" path="res://res/Sprite-0016.png" id="2_v3xkq"]
+[ext_resource type="Texture2D" uid="uid://jwh7lubgaxig" path="res://res/Player1.png" id="3_fxihx"]
+[ext_resource type="Texture2D" uid="uid://c8yfynqlv7865" path="res://res/Sprite-0017.png" id="3_kqsr8"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0onf6"]
 

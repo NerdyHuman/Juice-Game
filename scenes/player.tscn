@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://db1tvuq63ewte"]
 
-[ext_resource type="Script" path="res://src/player.gd" id="1_1r80b"]
-[ext_resource type="AudioStream" uid="uid://d1n8xufh6x6k3" path="res://res/DashSFX.wav" id="3_hocf0"]
-[ext_resource type="AudioStream" uid="uid://dp6nps618jfme" path="res://res/DashRegenSFX.wav" id="3_mrwnx"]
-[ext_resource type="Texture2D" uid="uid://dfxiowpar0ejg" path="res://res/Sprite-0018.png" id="3_wgw55"]
+[ext_resource type="Script" uid="uid://4ietodpjetdk" path="res://src/player.gd" id="1_1r80b"]
+[ext_resource type="AudioStream" uid="uid://dk0ecei4v4i34" path="res://res/DashSFX.wav" id="3_hocf0"]
+[ext_resource type="AudioStream" uid="uid://cp2pxpxoh5vuk" path="res://res/DashRegenSFX.wav" id="3_mrwnx"]
+[ext_resource type="Texture2D" uid="uid://b1y8tv8jdol23" path="res://res/Sprite-0018.png" id="3_wgw55"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rmvda"]
 radius = 5.43
